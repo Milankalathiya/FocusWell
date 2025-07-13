@@ -29,27 +29,23 @@ import {
 import { analyticsService } from '../services/analyticsService';
 import type { Analytics } from '../types';
 
+alert('Analytics page loaded!');
+
 const AnalyticsPage: React.FC = () => {
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
-  const [taskCompletion, setTaskCompletion] = useState<any[]>([]);
-  const [habitConsistency, setHabitConsistency] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState(7);
 
   useEffect(() => {
+    console.log('useEffect running, dateRange:', dateRange);
     const fetchAnalytics = async () => {
       setLoading(true);
       setError(null);
       try {
-        const [analyticsData, taskData, habitData] = await Promise.all([
-          analyticsService.getAnalytics(),
-          analyticsService.getTaskCompletion(dateRange),
-          analyticsService.getHabitConsistency(dateRange),
-        ]);
+        const analyticsData = await analyticsService.getAnalytics(dateRange);
+        console.log('Analytics API response:', analyticsData);
         setAnalytics(analyticsData);
-        setTaskCompletion(taskData);
-        setHabitConsistency(habitData);
       } catch (err: any) {
         setError('Failed to fetch analytics');
       } finally {
@@ -58,6 +54,8 @@ const AnalyticsPage: React.FC = () => {
     };
     fetchAnalytics();
   }, [dateRange]);
+
+  console.log('AnalyticsPage rendered, dateRange:', dateRange);
 
   const taskCompletionRate = analytics?.totalTasks
     ? (analytics.completedTasks / analytics.totalTasks) * 100
@@ -75,6 +73,34 @@ const AnalyticsPage: React.FC = () => {
       color: '#F59E0B',
     },
   ];
+
+  // Map tasksThisWeek and habitsThisWeek to recharts format
+  const days = analytics?.tasksThisWeek?.length || 7;
+  const today = new Date();
+  const taskCompletion =
+    analytics?.tasksThisWeek?.map((count, idx) => {
+      const d = new Date(today);
+      d.setDate(today.getDate() - (days - 1 - idx));
+      return {
+        date: d.toISOString().slice(0, 10),
+        completed: count,
+        total: analytics?.totalTasks || 0,
+      };
+    }) || [];
+  const habitConsistency =
+    analytics?.habitsThisWeek?.map((count, idx) => {
+      const d = new Date(today);
+      d.setDate(today.getDate() - (days - 1 - idx));
+      return {
+        date: d.toISOString().slice(0, 10),
+        logged: count,
+        total: analytics?.activeHabits || 0,
+      };
+    }) || [];
+
+  useEffect(() => {
+    console.log('Fallback useEffect running');
+  }, []);
 
   if (loading) {
     return (

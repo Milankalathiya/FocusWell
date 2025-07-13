@@ -11,7 +11,6 @@ import {
   MenuItem,
   Select,
   TextField,
-  Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -75,11 +74,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-      <DialogTitle>
-        <Typography variant="h6">
-          {task ? 'Edit Task' : 'Create New Task'}
-        </Typography>
-      </DialogTitle>
+      <DialogTitle>{task ? 'Edit Task' : 'Create New Task'}</DialogTitle>
       <DialogContent>
         <Box
           component="form"

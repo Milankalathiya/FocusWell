@@ -62,6 +62,11 @@ export interface Habit {
   longestStreak?: number;
 }
 
+export interface HabitWithStatus extends Habit {
+  isLoggedToday: boolean;
+  currentStreak: number;
+}
+
 export interface HabitLog {
   id: number;
   habit: Habit;
@@ -88,6 +93,7 @@ export interface Analytics {
   worstDay?: string;
   tasksThisWeek: number[];
   habitsThisWeek: number[];
+  period?: string;
 }
 
 export interface ApiResponse<T> {
@@ -116,4 +122,87 @@ export interface LoginResponse {
     id: number;
     username: string;
   };
+}
+
+// Wellness Types
+export interface WellnessData {
+  id: number;
+  date: string;
+  sleepHours: number;
+  sleepQuality: number;
+  moodScore: number;
+  stressLevel: number;
+  productivityScore: number;
+  physicalActivityMinutes: number;
+  socialInteractionHours: number;
+  screenTimeHours: number;
+  waterIntakeGlasses: number;
+  mealsSkipped: number;
+  meditationMinutes: number;
+  energyLevel: number;
+  notes: string;
+  wellnessScore: number;
+  user: User;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WellnessDataRequest {
+  date: string;
+  sleepHours: number;
+  sleepQuality: number;
+  moodScore: number;
+  stressLevel: number;
+  productivityScore: number;
+  physicalActivityMinutes: number;
+  socialInteractionHours: number;
+  screenTimeHours: number;
+  waterIntakeGlasses: number;
+  mealsSkipped: number;
+  meditationMinutes: number;
+  energyLevel: number;
+  notes: string;
+}
+
+export interface WellnessStats {
+  totalEntries: number;
+  currentWellnessScore: number;
+  averageWellnessScore: number;
+  streakDays: number;
+}
+
+export interface RiskAssessment {
+  id: number;
+  assessmentDate: string;
+  depressionRisk: number;
+  anxietyRisk: number;
+  burnoutRisk: number;
+  stressRisk: number;
+  isolationRisk: number;
+  overallRiskLevel: 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';
+  riskFactors: string;
+  recommendations: string;
+  requiresImmediateAttention: boolean;
+  shouldContactProfessional: boolean;
+  user: User;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Recommendation {
+  id: number;
+  title: string;
+  description: string;
+  recommendationType: string;
+  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+  isCompleted: boolean;
+  completedAt?: string;
+  actionItems: string;
+  expectedImpact: string;
+  difficultyLevel: 'EASY' | 'MEDIUM' | 'HARD';
+  estimatedTimeMinutes: number;
+  category: string;
+  user: User;
+  createdAt: string;
+  updatedAt: string;
 }

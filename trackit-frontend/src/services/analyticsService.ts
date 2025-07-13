@@ -1,17 +1,12 @@
-import api from './api';
 import type { Analytics, ApiResponse } from '../types';
+import api from './api';
 
 export const analyticsService = {
-  async getAnalytics(startDate?: string, endDate?: string): Promise<Analytics> {
-    const params = new URLSearchParams();
-    if (startDate) params.append('startDate', startDate);
-    if (endDate) params.append('endDate', endDate);
-
-    // FIX: use /summary endpoint
-    const response = await api.get<ApiResponse<Analytics>>(
-      `/analytics/summary?${params}`
+  async getAnalytics(days: number = 7): Promise<Analytics> {
+    const response = await api.get<Analytics>(
+      `/analytics/summary?days=${days}`
     );
-    return response.data.data;
+    return response.data;
   },
 
   async getTaskCompletion(

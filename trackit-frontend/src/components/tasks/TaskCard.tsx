@@ -168,13 +168,25 @@ const TaskCard: React.FC<TaskCardProps> = ({
             )}
 
             <Tooltip title="Edit Task">
-              <IconButton
-                size="small"
-                onClick={() => onEdit(task)}
-                disabled={task.completed}
-              >
-                <Edit fontSize="small" />
-              </IconButton>
+              {task.completed ? (
+                <span>
+                  <IconButton
+                    size="small"
+                    onClick={() => onEdit(task)}
+                    disabled={task.completed}
+                  >
+                    <Edit fontSize="small" />
+                  </IconButton>
+                </span>
+              ) : (
+                <IconButton
+                  size="small"
+                  onClick={() => onEdit(task)}
+                  disabled={task.completed}
+                >
+                  <Edit fontSize="small" />
+                </IconButton>
+              )}
             </Tooltip>
 
             <Tooltip title="Delete Task">

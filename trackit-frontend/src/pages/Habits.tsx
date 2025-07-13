@@ -5,7 +5,6 @@ import {
   Button,
   CircularProgress,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
   Grid,
@@ -15,7 +14,12 @@ import React, { useState } from 'react';
 import HabitCard from '../components/habits/HabitCard';
 import HabitForm from '../components/habits/HabitForm';
 import { useHabits } from '../hooks/useHabits';
-import type { Habit, HabitFormData } from '../types';
+import type { HabitWithStatus } from '../types';
+type HabitFormData = {
+  name: string;
+  description?: string;
+  frequency: string;
+};
 
 const Habits: React.FC = () => {
   const {
@@ -28,7 +32,9 @@ const Habits: React.FC = () => {
     error,
   } = useHabits();
   const [showDialog, setShowDialog] = useState(false);
-  const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
+  const [editingHabit, setEditingHabit] = useState<HabitWithStatus | null>(
+    null
+  );
   const [submitting, setSubmitting] = useState(false);
 
   const handleCreateHabit = async (data: HabitFormData) => {
@@ -54,7 +60,7 @@ const Habits: React.FC = () => {
     }
   };
 
-  const handleEdit = (habit: Habit) => {
+  const handleEdit = (habit: HabitWithStatus) => {
     setEditingHabit(habit);
     setShowDialog(true);
   };
@@ -74,8 +80,12 @@ const Habits: React.FC = () => {
     setEditingHabit(null);
   };
 
-  const dailyHabits = habits.filter((habit) => habit.frequency === 'DAILY');
-  const weeklyHabits = habits.filter((habit) => habit.frequency === 'WEEKLY');
+  const dailyHabits = habits.filter(
+    (habit: HabitWithStatus) => habit.frequency === 'DAILY'
+  );
+  const weeklyHabits = habits.filter(
+    (habit: HabitWithStatus) => habit.frequency === 'WEEKLY'
+  );
 
   return (
     <Box sx={{ p: { xs: 1, md: 3 } }}>
@@ -150,6 +160,7 @@ const Habits: React.FC = () => {
                       onLogHabit={logHabit}
                       onEdit={handleEdit}
                       onDelete={handleDelete}
+                      isLoggedToday={habit.isLoggedToday}
                     />
                   </Grid>
                 ))}
@@ -169,6 +180,7 @@ const Habits: React.FC = () => {
                       onLogHabit={logHabit}
                       onEdit={handleEdit}
                       onDelete={handleDelete}
+                      isLoggedToday={habit.isLoggedToday}
                     />
                   </Grid>
                 ))}
@@ -191,11 +203,6 @@ const Habits: React.FC = () => {
             onClose={closeDialog}
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDialog} disabled={submitting}>
-            Cancel
-          </Button>
-        </DialogActions>
       </Dialog>
     </Box>
   );

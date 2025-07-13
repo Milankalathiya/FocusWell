@@ -17,6 +17,7 @@ import Dashboard from './pages/Dashboard';
 import Habits from './pages/Habits';
 import Profile from './pages/Profile';
 import Tasks from './pages/Tasks';
+import Wellness from './pages/Wellness';
 import { ROUTES } from './utils/constants';
 
 // Create a modern Material Design theme
@@ -152,6 +153,17 @@ function App() {
                   <ProtectedRoute>
                     <Layout>
                       <Analytics />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path={ROUTES.WELLNESS}
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <Wellness />
                     </Layout>
                   </ProtectedRoute>
                 }

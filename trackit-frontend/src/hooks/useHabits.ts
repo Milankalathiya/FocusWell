@@ -9,8 +9,13 @@ interface HabitFormData {
   frequency: string;
 }
 
+interface HabitWithStatus extends Habit {
+  isLoggedToday: boolean;
+  currentStreak: number;
+}
+
 export const useHabits = () => {
-  const [habits, setHabits] = useState<Habit[]>([]);
+  const [habits, setHabits] = useState<HabitWithStatus[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +24,32 @@ export const useHabits = () => {
     setError(null);
     try {
       const data = await habitService.getAllHabits();
-      setHabits(data);
+      // For each habit, fetch log status and streak
+      const habitsWithStatus = await Promise.all(
+        data.map(async (habit) => {
+          let isLoggedToday = false;
+          let currentStreak = 0;
+          try {
+            // Check if logged today
+            const logs = await habitService.getHabitLogs(habit.id);
+            const today = new Date().toISOString().slice(0, 10);
+            isLoggedToday = logs.some(
+              (log) => log.logDate.slice(0, 10) === today
+            );
+          } catch {
+            // Ignore error, treat as not logged
+          }
+          try {
+            // Fetch streak
+            const streakRes = await habitService.getStreak(habit.id);
+            currentStreak = streakRes.currentStreak || 0;
+          } catch {
+            // Ignore error, treat as 0 streak
+          }
+          return { ...habit, isLoggedToday, currentStreak };
+        })
+      );
+      setHabits(habitsWithStatus);
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to fetch habits';
@@ -34,8 +64,16 @@ export const useHabits = () => {
     setLoading(true);
     setError(null);
     try {
-      const newHabit = await habitService.createHabit(habitData);
-      setHabits((prev) => [newHabit, ...prev]);
+      // Ensure frequency is 'DAILY' or 'WEEKLY'
+      const newHabit = await habitService.createHabit({
+        ...habitData,
+        frequency: habitData.frequency === 'WEEKLY' ? 'WEEKLY' : 'DAILY',
+      });
+      // Add default status fields
+      setHabits((prev) => [
+        { ...newHabit, isLoggedToday: false, currentStreak: 0 },
+        ...prev,
+      ]);
       toast.success('Habit created successfully!');
       return newHabit;
     } catch (err: unknown) {
@@ -54,9 +92,17 @@ export const useHabits = () => {
       setLoading(true);
       setError(null);
       try {
-        const updatedHabit = await habitService.updateHabit(id, habitData);
+        // Ensure frequency is 'DAILY' or 'WEEKLY' if present
+        const updatedHabit = await habitService.updateHabit(id, {
+          ...habitData,
+          frequency: habitData.frequency === 'WEEKLY' ? 'WEEKLY' : 'DAILY',
+        });
         setHabits((prev) =>
-          prev.map((habit) => (habit.id === id ? updatedHabit : habit))
+          prev.map((habit) =>
+            habit.id === id
+              ? { ...updatedHabit, isLoggedToday: false, currentStreak: 0 }
+              : habit
+          )
         );
         toast.success('Habit updated successfully!');
         return updatedHabit;
@@ -91,25 +137,27 @@ export const useHabits = () => {
     }
   }, []);
 
-  const logHabit = useCallback(async (id: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const loggedHabit = await habitService.logHabit(id);
-      setHabits((prev) =>
-        prev.map((habit) => (habit.id === id ? loggedHabit : habit))
-      );
-      toast.success('Habit logged successfully!');
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to log habit';
-      setError(errorMessage);
-      toast.error(errorMessage);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const logHabit = useCallback(
+    async (id: number) => {
+      setLoading(true);
+      setError(null);
+      try {
+        await habitService.logHabit(id);
+        // After logging, refetch all habits to update log status and streaks
+        await fetchHabits();
+        toast.success('Habit logged successfully!');
+      } catch (err: unknown) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to log habit';
+        setError(errorMessage);
+        toast.error(errorMessage);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchHabits]
+  );
 
   useEffect(() => {
     fetchHabits();

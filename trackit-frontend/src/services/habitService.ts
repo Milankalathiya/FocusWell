@@ -44,4 +44,9 @@ export const habitService = {
     const response = await api.get(`/habits/${id}/weekly-progress`);
     return response.data;
   },
+
+  async getStreak(id: number): Promise<{ currentStreak: number }> {
+    const response = await api.get(`/habits/${id}/streak`);
+    return response.data;
+  },
 };

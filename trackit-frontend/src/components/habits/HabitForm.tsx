@@ -1,16 +1,11 @@
 import {
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   TextField,
-  Typography,
 } from '@mui/material';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -23,7 +18,6 @@ interface HabitFormData {
 }
 
 interface HabitFormProps {
-  open: boolean;
   onClose: () => void;
   onSubmit: (data: HabitFormData) => Promise<void>;
   habit?: Habit;
@@ -31,7 +25,6 @@ interface HabitFormProps {
 }
 
 const HabitForm: React.FC<HabitFormProps> = ({
-  open,
   onClose,
   onSubmit,
   habit,
@@ -56,72 +49,60 @@ const HabitForm: React.FC<HabitFormProps> = ({
     onClose();
   };
 
-  const handleClose = () => {
+  const handleCancel = () => {
     reset();
     onClose();
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        <Typography variant="h6">
-          {habit ? 'Edit Habit' : 'Create New Habit'}
-        </Typography>
-      </DialogTitle>
-      <DialogContent>
-        <Box
-          component="form"
-          onSubmit={handleSubmit(handleFormSubmit)}
-          sx={{ mt: 2 }}
+    <Box
+      component="form"
+      onSubmit={handleSubmit(handleFormSubmit)}
+      sx={{ mt: 2 }}
+    >
+      <TextField
+        {...register('name', { required: 'Habit name is required' })}
+        fullWidth
+        label="Habit Name"
+        variant="outlined"
+        margin="normal"
+        error={!!errors.name}
+        helperText={errors.name?.message}
+      />
+
+      <TextField
+        {...register('description')}
+        fullWidth
+        label="Description"
+        variant="outlined"
+        margin="normal"
+        multiline
+        rows={3}
+        error={!!errors.description}
+        helperText={errors.description?.message}
+      />
+
+      <FormControl fullWidth margin="normal">
+        <InputLabel>Frequency</InputLabel>
+        <Select
+          {...register('frequency')}
+          label="Frequency"
+          defaultValue="DAILY"
         >
-          <TextField
-            {...register('name', { required: 'Habit name is required' })}
-            fullWidth
-            label="Habit Name"
-            variant="outlined"
-            margin="normal"
-            error={!!errors.name}
-            helperText={errors.name?.message}
-          />
+          <MenuItem value="DAILY">Daily</MenuItem>
+          <MenuItem value="WEEKLY">Weekly</MenuItem>
+        </Select>
+      </FormControl>
 
-          <TextField
-            {...register('description')}
-            fullWidth
-            label="Description"
-            variant="outlined"
-            margin="normal"
-            multiline
-            rows={3}
-            error={!!errors.description}
-            helperText={errors.description?.message}
-          />
-
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Frequency</InputLabel>
-            <Select
-              {...register('frequency')}
-              label="Frequency"
-              defaultValue="DAILY"
-            >
-              <MenuItem value="DAILY">Daily</MenuItem>
-              <MenuItem value="WEEKLY">Weekly</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} disabled={loading}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+        <Button onClick={handleCancel} disabled={loading} sx={{ mr: 2 }}>
           Cancel
         </Button>
-        <Button
-          onClick={handleSubmit(handleFormSubmit)}
-          variant="contained"
-          disabled={loading}
-        >
+        <Button type="submit" variant="contained" disabled={loading}>
           {loading ? 'Saving...' : habit ? 'Update Habit' : 'Create Habit'}
         </Button>
-      </DialogActions>
-    </Dialog>
+      </Box>
+    </Box>
   );
 };
 

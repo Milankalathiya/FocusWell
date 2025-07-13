@@ -1,20 +1,23 @@
 package com.trackit.controller;
 
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.trackit.model.Habit;
 import com.trackit.model.HabitLog;
 import com.trackit.model.User;
 import com.trackit.repository.HabitRepository;
 import com.trackit.repository.UserRepository;
 import com.trackit.service.HabitLogService;
-import com.trackit.service.HabitService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/habits")
@@ -23,7 +26,8 @@ public class HabitLogController {
     private final HabitRepository habitRepository;
     private final UserRepository userRepository;
 
-    public HabitLogController(HabitLogService habitLogService, HabitRepository habitRepository, UserRepository userRepository) {
+    public HabitLogController(HabitLogService habitLogService, HabitRepository habitRepository,
+            UserRepository userRepository) {
         this.habitLogService = habitLogService;
         this.habitRepository = habitRepository;
         this.userRepository = userRepository;
@@ -56,6 +60,13 @@ public class HabitLogController {
         return ResponseEntity.ok(progress);
     }
 
+    @GetMapping("/{id}/logs")
+    public ResponseEntity<List<HabitLog>> getHabitLogs(@PathVariable Long id, Principal principal) {
+        Habit habit = validateOwnership(id, principal.getName());
+        List<HabitLog> logs = habitLogService.getLogsForHabit(habit);
+        return ResponseEntity.ok(logs);
+    }
+
     private Habit validateOwnership(Long habitId, String username) {
         User user = (User) userRepository.findByUsername(username).orElseThrow();
         return habitRepository.findById(habitId)
@@ -63,4 +74,3 @@ public class HabitLogController {
                 .orElseThrow(() -> new RuntimeException("Habit not found or not yours"));
     }
 }
-

@@ -35,32 +35,81 @@ public class AnalyticsController {
     private final UserRepository userRepository;
 
     @GetMapping("/summary")
-    public Map<String, Object> getSummary(Principal principal) {
+    public Map<String, Object> getSummary(
+            Principal principal,
+            @RequestParam(defaultValue = "30") int days) {
         String username = principal.getName();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         LocalDate endDate = LocalDate.now();
-        LocalDate startDate = endDate.minusDays(30); // Last 30 days
+        LocalDate startDate = endDate.minusDays(days - 1); // inclusive
 
-        // Get task statistics
-        List<Task> tasks = taskRepository.findByUserAndCreatedAtBetween(user, startDate.atStartOfDay(),
-                endDate.atTime(23, 59, 59));
+        // Get task statistics (use dueDate instead of createdAt)
+        List<Task> tasks = taskRepository.findByUserAndDueDateBetween(user, startDate, endDate);
         long totalTasks = tasks.size();
         long completedTasks = tasks.stream().filter(Task::isCompleted).count();
-        long pendingTasks = totalTasks - completedTasks;
 
         // Get habit statistics
         List<HabitLog> habitLogs = habitLogRepository.findByUserAndLogDateBetween(user, startDate, endDate);
         long totalHabitLogs = habitLogs.size();
+        long activeHabits = habitLogRepository.findByUserAndLogDateBetween(user, startDate, endDate)
+                .stream().map(log -> log.getHabit().getId()).distinct().count();
+
+        // Consistency score: days with at least one habit log / total days
+        Map<LocalDate, Long> logsByDay = new java.util.HashMap<>();
+        for (HabitLog log : habitLogs) {
+            logsByDay.put(log.getLogDate(), logsByDay.getOrDefault(log.getLogDate(), 0L) + 1);
+        }
+        long daysWithHabits = logsByDay.size();
+        double consistencyScore = days > 0 ? (double) daysWithHabits / days : 0.0;
+
+        // Best and worst day (by number of habit logs)
+        String bestDay = null;
+        String worstDay = null;
+        long max = 0;
+        long min = Long.MAX_VALUE;
+        for (Map.Entry<LocalDate, Long> entry : logsByDay.entrySet()) {
+            long count = entry.getValue();
+            if (count > max) {
+                max = count;
+                bestDay = entry.getKey().toString();
+            }
+            if (count < min) {
+                min = count;
+                worstDay = entry.getKey().toString();
+            }
+        }
+        if (min == Long.MAX_VALUE)
+            min = 0;
+
+        // Tasks this period (array of completed tasks per day)
+        List<Integer> tasksThisWeek = new java.util.ArrayList<>();
+        for (int i = days - 1; i >= 0; i--) {
+            LocalDate d = endDate.minusDays(i);
+            long count = tasks.stream().filter(
+                    t -> t.isCompleted() && t.getCompletedAt() != null && t.getCompletedAt().toLocalDate().equals(d))
+                    .count();
+            tasksThisWeek.add((int) count);
+        }
+        // Habits this period (array of habit logs per day)
+        List<Integer> habitsThisWeek = new java.util.ArrayList<>();
+        for (int i = days - 1; i >= 0; i--) {
+            LocalDate d = endDate.minusDays(i);
+            long count = habitLogs.stream().filter(log -> log.getLogDate().equals(d)).count();
+            habitsThisWeek.add((int) count);
+        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("totalTasks", totalTasks);
         result.put("completedTasks", completedTasks);
-        result.put("pendingTasks", pendingTasks);
-        result.put("totalHabitLogs", totalHabitLogs);
-        result.put("period", "Last 30 days");
-
+        result.put("activeHabits", activeHabits);
+        result.put("consistencyScore", consistencyScore);
+        result.put("bestDay", bestDay);
+        result.put("worstDay", worstDay);
+        result.put("tasksThisWeek", tasksThisWeek);
+        result.put("habitsThisWeek", habitsThisWeek);
+        result.put("period", "Last " + days + " days");
         return result;
     }
 

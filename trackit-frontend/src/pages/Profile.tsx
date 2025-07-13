@@ -5,10 +5,7 @@ import {
   Card,
   CardContent,
   CircularProgress,
-  Divider,
   Grid,
-  Paper,
-  TextField,
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
@@ -27,7 +24,8 @@ interface PasswordFormData {
 }
 
 const Profile: React.FC = () => {
-  const { state, updateUser } = useAuth();
+  const { state } = useAuth();
+  const user = state.user;
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
@@ -37,26 +35,23 @@ const Profile: React.FC = () => {
 
   const profileForm = useForm<ProfileFormData>({
     defaultValues: {
-      username: state.user?.username || '',
-      email: state.user?.email || '',
+      username: user?.username || '',
+      email: user?.email || '',
     },
   });
 
   const passwordForm = useForm<PasswordFormData>();
 
-  const handleProfileUpdate = async (data: ProfileFormData) => {
+  const handleProfileUpdate = async () => {
     setIsUpdatingProfile(true);
     setProfileError(null);
     setProfileSuccess(null);
     try {
-      // TODO: Implement updateProfile in authService
-      // const updatedUser = await authService.updateProfile(data);
-      // updateUser(updatedUser);
+      // For now, just show success message
+      // TODO: Implement actual profile update API
       setProfileSuccess('Profile updated successfully!');
-    } catch (error: any) {
-      setProfileError(
-        error.response?.data?.message || 'Failed to update profile'
-      );
+    } catch {
+      setProfileError('Failed to update profile');
     } finally {
       setIsUpdatingProfile(false);
     }
@@ -71,205 +66,471 @@ const Profile: React.FC = () => {
         setPasswordError('Passwords do not match');
         return;
       }
-      // TODO: Implement updatePassword in authService
+      // For now, just show success message
+      // TODO: Implement actual password update API
       setPasswordSuccess('Password updated successfully!');
       passwordForm.reset();
-    } catch (error: any) {
-      setPasswordError(
-        error.response?.data?.message || 'Failed to update password'
-      );
+    } catch {
+      setPasswordError('Failed to update password');
     } finally {
       setIsUpdatingPassword(false);
     }
   };
 
   return (
-    <Box sx={{ maxWidth: 700, mx: 'auto', p: { xs: 1, md: 3 } }}>
-      <Typography variant="h4" fontWeight={700} gutterBottom>
-        Profile Settings
-      </Typography>
-      <Typography color="text.secondary" sx={{ mb: 3 }}>
-        Manage your account information and preferences
-      </Typography>
-      <Paper sx={{ mb: 4, p: 3 }}>
-        <Typography variant="h6" fontWeight={600} gutterBottom>
-          Profile Information
+    <Box sx={{ flexGrow: 1 }}>
+      {/* Header Section */}
+      <Box sx={{ mb: 6 }}>
+        <Typography
+          variant="h3"
+          sx={{
+            fontWeight: 700,
+            color: 'var(--text-primary)',
+            mb: 1,
+          }}
+        >
+          Profile Settings
         </Typography>
-        <Divider sx={{ mb: 2 }} />
-        <form onSubmit={profileForm.handleSubmit(handleProfileUpdate)}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Username"
-                fullWidth
-                {...profileForm.register('username', {
-                  required: 'Username is required',
-                  minLength: {
-                    value: 3,
-                    message: 'Username must be at least 3 characters',
-                  },
-                })}
-                error={!!profileForm.formState.errors.username}
-                helperText={profileForm.formState.errors.username?.message}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Email"
-                fullWidth
-                {...profileForm.register('email', {
-                  required: 'Email is required',
-                  pattern: {
-                    value: /^\S+@\S+$/i,
-                    message: 'Invalid email address',
-                  },
-                })}
-                error={!!profileForm.formState.errors.email}
-                helperText={profileForm.formState.errors.email?.message}
-              />
-            </Grid>
-          </Grid>
-          {profileError && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {profileError}
-            </Alert>
-          )}
-          {profileSuccess && (
-            <Alert severity="success" sx={{ mt: 2 }}>
-              {profileSuccess}
-            </Alert>
-          )}
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={isUpdatingProfile}
-            >
-              {isUpdatingProfile ? (
-                <CircularProgress size={20} sx={{ mr: 1 }} />
-              ) : null}
-              Save Changes
-            </Button>
-          </Box>
-        </form>
-      </Paper>
-      <Paper sx={{ mb: 4, p: 3 }}>
-        <Typography variant="h6" fontWeight={600} gutterBottom>
-          Change Password
+        <Typography
+          variant="h6"
+          sx={{ color: 'var(--text-secondary)', fontWeight: 400 }}
+        >
+          Manage your account information and preferences
         </Typography>
-        <Divider sx={{ mb: 2 }} />
-        <form onSubmit={passwordForm.handleSubmit(handlePasswordUpdate)}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Current Password"
-                type="password"
-                fullWidth
-                {...passwordForm.register('currentPassword', {
-                  required: 'Current password is required',
-                })}
-                error={!!passwordForm.formState.errors.currentPassword}
-                helperText={
-                  passwordForm.formState.errors.currentPassword?.message
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="New Password"
-                type="password"
-                fullWidth
-                {...passwordForm.register('newPassword', {
-                  required: 'New password is required',
-                  minLength: {
-                    value: 6,
-                    message: 'Password must be at least 6 characters',
-                  },
-                })}
-                error={!!passwordForm.formState.errors.newPassword}
-                helperText={passwordForm.formState.errors.newPassword?.message}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Confirm New Password"
-                type="password"
-                fullWidth
-                {...passwordForm.register('confirmPassword', {
-                  required: 'Please confirm your new password',
-                  validate: (value) =>
-                    value === passwordForm.watch('newPassword') ||
-                    'Passwords do not match',
-                })}
-                error={!!passwordForm.formState.errors.confirmPassword}
-                helperText={
-                  passwordForm.formState.errors.confirmPassword?.message
-                }
-              />
-            </Grid>
-          </Grid>
-          {passwordError && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {passwordError}
-            </Alert>
-          )}
-          {passwordSuccess && (
-            <Alert severity="success" sx={{ mt: 2 }}>
-              {passwordSuccess}
-            </Alert>
-          )}
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={isUpdatingPassword}
+      </Box>
+
+      <Grid container spacing={4}>
+        {/* Profile Information */}
+        <Grid item xs={12} md={6}>
+          <Card
+            sx={{
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--border-light)',
+              boxShadow: 'var(--shadow-sm)',
+            }}
+          >
+            <Box
+              sx={{
+                p: 3,
+                borderBottom: '1px solid var(--border-light)',
+              }}
             >
-              {isUpdatingPassword ? (
-                <CircularProgress size={20} sx={{ mr: 1 }} />
-              ) : null}
-              Update Password
-            </Button>
-          </Box>
-        </form>
-      </Paper>
-      <Card sx={{ p: 3 }}>
-        <CardContent>
-          <Typography variant="h6" fontWeight={600} gutterBottom>
-            Account Statistics
-          </Typography>
-          <Divider sx={{ mb: 2 }} />
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={4}>
-              <Box sx={{ textAlign: 'center', p: 2 }}>
-                <Typography variant="h4" color="primary.main" fontWeight={700}>
-                  0
-                </Typography>
-                <Typography color="text.secondary">Total Tasks</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Box sx={{ textAlign: 'center', p: 2 }}>
-                <Typography variant="h4" color="success.main" fontWeight={700}>
-                  0
-                </Typography>
-                <Typography color="text.secondary">Active Habits</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Box sx={{ textAlign: 'center', p: 2 }}>
-                <Typography
-                  variant="h4"
-                  color="secondary.main"
-                  fontWeight={700}
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 600, color: 'var(--text-primary)' }}
+              >
+                Profile Information
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: 'var(--text-secondary)', mt: 1 }}
+              >
+                Update your personal information
+              </Typography>
+            </Box>
+            <Box sx={{ p: 3 }}>
+              <form onSubmit={profileForm.handleSubmit(handleProfileUpdate)}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} sm={6}>
+                    <Typography
+                      variant="body2"
+                      sx={{ mb: 1, color: 'var(--text-secondary)' }}
+                    >
+                      Username
+                    </Typography>
+                    <input
+                      {...profileForm.register('username', {
+                        required: 'Username is required',
+                        minLength: {
+                          value: 3,
+                          message: 'Username must be at least 3 characters',
+                        },
+                      })}
+                      style={{
+                        width: '100%',
+                        padding: '12px 16px',
+                        borderRadius: 'var(--radius-md)',
+                        border: profileForm.formState.errors.username
+                          ? '1px solid var(--accent-danger)'
+                          : '1px solid var(--border-light)',
+                        background: 'var(--bg-secondary)',
+                        color: 'var(--text-primary)',
+                        fontSize: 'var(--font-size-sm)',
+                        outline: 'none',
+                      }}
+                      placeholder="Enter username"
+                    />
+                    {profileForm.formState.errors.username && (
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'var(--accent-danger)', mt: 1 }}
+                      >
+                        {profileForm.formState.errors.username.message}
+                      </Typography>
+                    )}
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography
+                      variant="body2"
+                      sx={{ mb: 1, color: 'var(--text-secondary)' }}
+                    >
+                      Email
+                    </Typography>
+                    <input
+                      {...profileForm.register('email', {
+                        required: 'Email is required',
+                        pattern: {
+                          value: /^\S+@\S+$/i,
+                          message: 'Invalid email address',
+                        },
+                      })}
+                      style={{
+                        width: '100%',
+                        padding: '12px 16px',
+                        borderRadius: 'var(--radius-md)',
+                        border: profileForm.formState.errors.email
+                          ? '1px solid var(--accent-danger)'
+                          : '1px solid var(--border-light)',
+                        background: 'var(--bg-secondary)',
+                        color: 'var(--text-primary)',
+                        fontSize: 'var(--font-size-sm)',
+                        outline: 'none',
+                      }}
+                      placeholder="Enter email"
+                    />
+                    {profileForm.formState.errors.email && (
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'var(--accent-danger)', mt: 1 }}
+                      >
+                        {profileForm.formState.errors.email.message}
+                      </Typography>
+                    )}
+                  </Grid>
+                </Grid>
+                {profileError && (
+                  <Alert
+                    severity="error"
+                    sx={{ mt: 3, borderRadius: 'var(--radius-md)' }}
+                  >
+                    {profileError}
+                  </Alert>
+                )}
+                {profileSuccess && (
+                  <Alert
+                    severity="success"
+                    sx={{ mt: 3, borderRadius: 'var(--radius-md)' }}
+                  >
+                    {profileSuccess}
+                  </Alert>
+                )}
+                <Box
+                  sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}
                 >
-                  0
-                </Typography>
-                <Typography color="text.secondary">Days Active</Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={isUpdatingProfile}
+                    sx={{
+                      background: 'var(--accent-primary)',
+                      borderRadius: 'var(--radius-md)',
+                      px: 3,
+                      py: 1.5,
+                      fontWeight: 600,
+                      textTransform: 'none',
+                      '&:hover': {
+                        background: '#6B5BFF',
+                        transform: 'translateY(-1px)',
+                        boxShadow: 'var(--shadow-glow)',
+                      },
+                    }}
+                  >
+                    {isUpdatingProfile ? (
+                      <CircularProgress size={20} sx={{ mr: 1 }} />
+                    ) : null}
+                    Save Changes
+                  </Button>
+                </Box>
+              </form>
+            </Box>
+          </Card>
+        </Grid>
+
+        {/* Change Password */}
+        <Grid item xs={12} md={6}>
+          <Card
+            sx={{
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--border-light)',
+              boxShadow: 'var(--shadow-sm)',
+            }}
+          >
+            <Box
+              sx={{
+                p: 3,
+                borderBottom: '1px solid var(--border-light)',
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 600, color: 'var(--text-primary)' }}
+              >
+                Change Password
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: 'var(--text-secondary)', mt: 1 }}
+              >
+                Update your password for security
+              </Typography>
+            </Box>
+            <Box sx={{ p: 3 }}>
+              <form onSubmit={passwordForm.handleSubmit(handlePasswordUpdate)}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="body2"
+                      sx={{ mb: 1, color: 'var(--text-secondary)' }}
+                    >
+                      Current Password
+                    </Typography>
+                    <input
+                      type="password"
+                      {...passwordForm.register('currentPassword', {
+                        required: 'Current password is required',
+                      })}
+                      style={{
+                        width: '100%',
+                        padding: '12px 16px',
+                        borderRadius: 'var(--radius-md)',
+                        border: passwordForm.formState.errors.currentPassword
+                          ? '1px solid var(--accent-danger)'
+                          : '1px solid var(--border-light)',
+                        background: 'var(--bg-secondary)',
+                        color: 'var(--text-primary)',
+                        fontSize: 'var(--font-size-sm)',
+                        outline: 'none',
+                      }}
+                      placeholder="Enter current password"
+                    />
+                    {passwordForm.formState.errors.currentPassword && (
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'var(--accent-danger)', mt: 1 }}
+                      >
+                        {passwordForm.formState.errors.currentPassword.message}
+                      </Typography>
+                    )}
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography
+                      variant="body2"
+                      sx={{ mb: 1, color: 'var(--text-secondary)' }}
+                    >
+                      New Password
+                    </Typography>
+                    <input
+                      type="password"
+                      {...passwordForm.register('newPassword', {
+                        required: 'New password is required',
+                        minLength: {
+                          value: 6,
+                          message: 'Password must be at least 6 characters',
+                        },
+                      })}
+                      style={{
+                        width: '100%',
+                        padding: '12px 16px',
+                        borderRadius: 'var(--radius-md)',
+                        border: passwordForm.formState.errors.newPassword
+                          ? '1px solid var(--accent-danger)'
+                          : '1px solid var(--border-light)',
+                        background: 'var(--bg-secondary)',
+                        color: 'var(--text-primary)',
+                        fontSize: 'var(--font-size-sm)',
+                        outline: 'none',
+                      }}
+                      placeholder="Enter new password"
+                    />
+                    {passwordForm.formState.errors.newPassword && (
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'var(--accent-danger)', mt: 1 }}
+                      >
+                        {passwordForm.formState.errors.newPassword.message}
+                      </Typography>
+                    )}
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography
+                      variant="body2"
+                      sx={{ mb: 1, color: 'var(--text-secondary)' }}
+                    >
+                      Confirm New Password
+                    </Typography>
+                    <input
+                      type="password"
+                      {...passwordForm.register('confirmPassword', {
+                        required: 'Please confirm your new password',
+                        validate: (value) =>
+                          value === passwordForm.watch('newPassword') ||
+                          'Passwords do not match',
+                      })}
+                      style={{
+                        width: '100%',
+                        padding: '12px 16px',
+                        borderRadius: 'var(--radius-md)',
+                        border: passwordForm.formState.errors.confirmPassword
+                          ? '1px solid var(--accent-danger)'
+                          : '1px solid var(--border-light)',
+                        background: 'var(--bg-secondary)',
+                        color: 'var(--text-primary)',
+                        fontSize: 'var(--font-size-sm)',
+                        outline: 'none',
+                      }}
+                      placeholder="Confirm new password"
+                    />
+                    {passwordForm.formState.errors.confirmPassword && (
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'var(--accent-danger)', mt: 1 }}
+                      >
+                        {passwordForm.formState.errors.confirmPassword.message}
+                      </Typography>
+                    )}
+                  </Grid>
+                </Grid>
+                {passwordError && (
+                  <Alert
+                    severity="error"
+                    sx={{ mt: 3, borderRadius: 'var(--radius-md)' }}
+                  >
+                    {passwordError}
+                  </Alert>
+                )}
+                {passwordSuccess && (
+                  <Alert
+                    severity="success"
+                    sx={{ mt: 3, borderRadius: 'var(--radius-md)' }}
+                  >
+                    {passwordSuccess}
+                  </Alert>
+                )}
+                <Box
+                  sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}
+                >
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={isUpdatingPassword}
+                    sx={{
+                      background: 'var(--accent-primary)',
+                      borderRadius: 'var(--radius-md)',
+                      px: 3,
+                      py: 1.5,
+                      fontWeight: 600,
+                      textTransform: 'none',
+                      '&:hover': {
+                        background: '#6B5BFF',
+                        transform: 'translateY(-1px)',
+                        boxShadow: 'var(--shadow-glow)',
+                      },
+                    }}
+                  >
+                    {isUpdatingPassword ? (
+                      <CircularProgress size={20} sx={{ mr: 1 }} />
+                    ) : null}
+                    Update Password
+                  </Button>
+                </Box>
+              </form>
+            </Box>
+          </Card>
+        </Grid>
+
+        {/* Account Statistics */}
+        <Grid item xs={12}>
+          <Card
+            sx={{
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--border-light)',
+              boxShadow: 'var(--shadow-sm)',
+            }}
+          >
+            <Box
+              sx={{
+                p: 3,
+                borderBottom: '1px solid var(--border-light)',
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 600, color: 'var(--text-primary)' }}
+              >
+                Account Statistics
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: 'var(--text-secondary)', mt: 1 }}
+              >
+                Overview of your account activity
+              </Typography>
+            </Box>
+            <CardContent sx={{ p: 3 }}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={4}>
+                  <Box sx={{ textAlign: 'center', p: 2 }}>
+                    <Typography
+                      variant="h3"
+                      sx={{ fontWeight: 700, color: 'var(--accent-primary)' }}
+                    >
+                      0
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: 'var(--text-secondary)' }}
+                    >
+                      Total Tasks
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Box sx={{ textAlign: 'center', p: 2 }}>
+                    <Typography
+                      variant="h3"
+                      sx={{ fontWeight: 700, color: 'var(--accent-info)' }}
+                    >
+                      0
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: 'var(--text-secondary)' }}
+                    >
+                      Active Habits
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Box sx={{ textAlign: 'center', p: 2 }}>
+                    <Typography
+                      variant="h3"
+                      sx={{ fontWeight: 700, color: 'var(--accent-success)' }}
+                    >
+                      0
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: 'var(--text-secondary)' }}
+                    >
+                      Wellness Entries
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

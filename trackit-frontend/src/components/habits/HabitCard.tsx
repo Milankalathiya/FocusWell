@@ -23,7 +23,7 @@ interface HabitCardProps {
   onEdit: (habit: Habit) => void;
   onDelete: (habitId: number) => void;
   onLogHabit: (habitId: number) => void;
-  isLoggedToday?: boolean;
+  isLoggedToday: boolean;
 }
 
 const HabitCard: React.FC<HabitCardProps> = ({
@@ -31,7 +31,7 @@ const HabitCard: React.FC<HabitCardProps> = ({
   onEdit,
   onDelete,
   onLogHabit,
-  isLoggedToday = false,
+  isLoggedToday,
 }) => {
   const getStreakColor = (streak: number) => {
     if (streak >= 7) return 'success';
@@ -71,10 +71,10 @@ const HabitCard: React.FC<HabitCardProps> = ({
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
               <Chip
-                label={`${habit.currentStreak || 0} day streak`}
-                color={getStreakColor(habit.currentStreak || 0)}
+                label={`${habit.currentStreak ?? 0} day streak`}
+                color={getStreakColor(habit.currentStreak ?? 0)}
                 size="small"
-                icon={getStreakIcon(habit.currentStreak || 0)}
+                icon={getStreakIcon(habit.currentStreak ?? 0)}
               />
 
               {habit.longestStreak &&
@@ -94,7 +94,7 @@ const HabitCard: React.FC<HabitCardProps> = ({
                 </Typography>
                 <LinearProgress
                   variant="determinate"
-                  value={Math.min((habit.currentStreak / 30) * 100, 100)}
+                  value={Math.min(((habit.currentStreak ?? 0) / 30) * 100, 100)}
                   sx={{ height: 8, borderRadius: 4 }}
                 />
               </Box>
@@ -102,15 +102,19 @@ const HabitCard: React.FC<HabitCardProps> = ({
           </Box>
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Tooltip title="Log Today">
-              <IconButton
-                size="small"
-                onClick={() => onLogHabit(habit.id)}
-                color={isLoggedToday ? 'success' : 'primary'}
-                disabled={isLoggedToday}
-              >
-                <TrendingUp fontSize="small" />
-              </IconButton>
+            <Tooltip
+              title={isLoggedToday ? 'Already logged today' : 'Log Today'}
+            >
+              <span>
+                <IconButton
+                  size="small"
+                  onClick={() => onLogHabit(habit.id)}
+                  color={isLoggedToday ? 'success' : 'primary'}
+                  disabled={isLoggedToday}
+                >
+                  <TrendingUp fontSize="small" />
+                </IconButton>
+              </span>
             </Tooltip>
 
             <Tooltip title="Edit Habit">

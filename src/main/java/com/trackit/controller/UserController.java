@@ -86,6 +86,35 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
+    @PostMapping("/update-password")
+    public ResponseEntity<?> updatePassword(
+            @RequestBody Map<String, String> payload,
+            Authentication authentication) {
+        String username = authentication.getName();
+        Optional<User> optionalUser = userService.findByUsername(username);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "User not found"));
+        }
+        User user = optionalUser.get();
+
+        String oldPassword = payload.get("oldPassword");
+        String newPassword = payload.get("newPassword");
+
+        if (oldPassword == null || newPassword == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Old and new password are required"));
+        }
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Old password is incorrect"));
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return ResponseEntity.ok(Map.of("message", "Password updated successfully"));
+    }
+
     @GetMapping("/profile")
     public ResponseEntity<User> getProfile(Authentication authentication) {
         String username = authentication.getName(); // Extracted from JWT
