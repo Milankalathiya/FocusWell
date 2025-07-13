@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Frontend Branch - Track It
 
 This branch contains the frontend work for the project, including:
@@ -19,3 +20,6 @@ This branch contains the frontend work for the project, including:
    ```bash
    git clone https://github.com/your-username/your-repo.git
    cd your-repo
+=======
+# LifeDash
+>>>>>>> 010a5b0f9d21b0ac653258c98f2b1af854896ef5
