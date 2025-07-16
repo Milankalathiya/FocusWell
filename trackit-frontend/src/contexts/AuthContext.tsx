@@ -6,6 +6,7 @@ import React, {
   useReducer,
 } from 'react';
 import toast from 'react-hot-toast';
+import { setLogoutFunction } from '../services/api';
 import { authService } from '../services/authService';
 import type { AuthState, LoginResponse, User } from '../types';
 import { clearAuthData, setAuthData } from '../utils/auth';
@@ -72,6 +73,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   useEffect(() => {
+    // Register the logout function for global API error handling
+    setLogoutFunction(logout);
     const token = localStorage.getItem(TOKEN_KEY);
     const userStr = localStorage.getItem(USER_KEY);
 

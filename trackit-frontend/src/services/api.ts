@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
 import { TOKEN_KEY, USER_KEY } from '../utils/constants';
+// Removed unused import of useAuth
 
 interface ErrorResponse {
   message?: string;
@@ -30,6 +31,12 @@ api.interceptors.request.use(
   }
 );
 
+// Helper to call logout from AuthContext outside of React tree
+let logoutFn: (() => void) | null = null;
+export const setLogoutFunction = (fn: () => void) => {
+  logoutFn = fn;
+};
+
 // Response interceptor for error handling
 api.interceptors.response.use(
   (response: AxiosResponse) => {
@@ -41,13 +48,20 @@ api.interceptors.response.use(
 
       switch (status) {
         case 401:
-          // Unauthorized - clear token and redirect to login
-          localStorage.removeItem(TOKEN_KEY);
-          localStorage.removeItem(USER_KEY);
-          window.location.href = '/login';
+          // Unauthorized - call logout from context if available
+          if (logoutFn) {
+            logoutFn();
+          } else {
+            localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem(USER_KEY);
+            window.location.href = '/login';
+          }
           toast.error('Session expired. Please login again.');
           break;
         case 403:
+          if (logoutFn) {
+            logoutFn();
+          }
           toast.error(
             "Access denied. You don't have permission for this action."
           );

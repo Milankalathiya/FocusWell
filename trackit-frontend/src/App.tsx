@@ -10,6 +10,7 @@ import {
 import LoginForm from './components/auth/LoginForm';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import RegisterForm from './components/auth/RegisterForm';
+import ChatCoach from './components/common/ChatCoach';
 import Layout from './components/common/Layout';
 import { AuthProvider } from './contexts/AuthContext';
 import Analytics from './pages/Analytics';
@@ -213,6 +214,7 @@ function App() {
                 },
               }}
             />
+            <ChatCoach />
           </div>
         </Router>
       </AuthProvider>

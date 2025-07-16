@@ -1,3 +1,4 @@
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import {
   Alert,
   Box,
@@ -27,9 +28,8 @@ import {
   YAxis,
 } from 'recharts';
 import { analyticsService } from '../services/analyticsService';
+import api from '../services/api';
 import type { Analytics } from '../types';
-
-alert('Analytics page loaded!');
 
 const AnalyticsPage: React.FC = () => {
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
@@ -37,14 +37,38 @@ const AnalyticsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState(7);
 
+  // AI Insights state
+  const [aiLoading, setAiLoading] = useState(true);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [aiInsights, setAiInsights] = useState<{
+    wellnessScore: number;
+    insights: string[];
+    recommendations: string;
+    sentimentSummary: string;
+  } | null>(null);
+
   useEffect(() => {
-    console.log('useEffect running, dateRange:', dateRange);
+    const fetchAIInsights = async () => {
+      setAiLoading(true);
+      setAiError(null);
+      try {
+        const res = await api.post('/ai/insights');
+        setAiInsights(res.data);
+      } catch (err) {
+        setAiError('Failed to fetch AI insights');
+      } finally {
+        setAiLoading(false);
+      }
+    };
+    fetchAIInsights();
+  }, []);
+
+  useEffect(() => {
     const fetchAnalytics = async () => {
       setLoading(true);
       setError(null);
       try {
         const analyticsData = await analyticsService.getAnalytics(dateRange);
-        console.log('Analytics API response:', analyticsData);
         setAnalytics(analyticsData);
       } catch (err: any) {
         setError('Failed to fetch analytics');
@@ -102,7 +126,7 @@ const AnalyticsPage: React.FC = () => {
     console.log('Fallback useEffect running');
   }, []);
 
-  if (loading) {
+  if (loading || aiLoading) {
     return (
       <Box
         sx={{
@@ -119,9 +143,60 @@ const AnalyticsPage: React.FC = () => {
   if (error) {
     return <Alert severity="error">{error}</Alert>;
   }
+  if (aiError) {
+    return <Alert severity="error">{aiError}</Alert>;
+  }
 
   return (
     <Box sx={{ p: { xs: 1, md: 3 } }}>
+      {/* AI Insights Section - Restyled and Fixed DOM nesting */}
+      {aiInsights && (
+        <Paper
+          sx={{
+            p: 3,
+            mb: 4,
+            borderLeft: '6px solid #6366f1',
+            background: 'background.paper',
+            color: 'text.primary',
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 2,
+          }}
+        >
+          <InfoOutlinedIcon sx={{ fontSize: 40, color: '#6366f1', mt: 0.5 }} />
+          <Box>
+            <Typography variant="h6" fontWeight={700} gutterBottom>
+              AI Wellness Insights
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              <b>Wellness Score:</b> {aiInsights.wellnessScore}
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 1 }}>
+              <b>Sentiment:</b> {aiInsights.sentimentSummary}
+            </Typography>
+            <Box sx={{ mb: 1 }}>
+              <Typography variant="body2" component="span">
+                <b>Insights:</b>
+              </Typography>
+              <ul style={{ margin: 0, paddingLeft: 18 }}>
+                {aiInsights.insights.map((insight, idx) => (
+                  <li key={idx}>{insight}</li>
+                ))}
+              </ul>
+            </Box>
+            <Box>
+              <Typography variant="body2" component="span">
+                <b>Recommendations:</b>
+              </Typography>
+              <ul style={{ margin: 0, paddingLeft: 18 }}>
+                {aiInsights.recommendations.split('\n').map((rec, idx) => (
+                  <li key={idx}>{rec}</li>
+                ))}
+              </ul>
+            </Box>
+          </Box>
+        </Paper>
+      )}
       <Box
         sx={{
           display: 'flex',
