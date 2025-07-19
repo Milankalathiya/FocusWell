@@ -8,15 +8,15 @@ It features a robust **Java Spring Boot** backend, a **React + TypeScript** fron
 
 ## 📑 Table of Contents
 
-- [Features](#features)
-- [Architecture](#architecture)
-- [Setup & Installation](#setup--installation)
-  - [Backend (Spring Boot)](#1-backend-java-spring-boot)
-  - [Frontend (React + TypeScript)](#2-frontend-react--typescript)
-  - [AI Microservice (Python)](#3-ai-microservice-python)
-- [AI Chatbot](#ai-chatbot)
-- [Development Notes](#development-notes)
-- [License](#license)
+- Features
+- Architecture
+- Setup & Installation
+  - Backend (Spring Boot)
+  - Frontend (React + TypeScript)
+  - AI Microservice (Python)
+- AI Chatbot
+- Development Notes
+- License
 
 ---
 
