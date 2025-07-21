@@ -22,10 +22,8 @@ const menuItems = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
-<<<<<<< HEAD
   return (
     <div className="flex min-h-screen bg-bg-main font-sans">
-=======
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -289,7 +287,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </Toolbar>
       </AppBar>
 
->>>>>>> deployment-fixes
       {/* Sidebar */}
       <aside className="glass flex flex-col justify-between w-64 p-6 m-4 rounded-2xl bg-sidebar-dark text-white shadow-glass">
         <div>
