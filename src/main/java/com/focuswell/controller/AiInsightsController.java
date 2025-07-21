@@ -3,6 +3,7 @@ package com.focuswell.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -52,9 +53,10 @@ public class AiInsightsController {
     aiRequest.put("tasks", tasks);
     aiRequest.put("habitLogs", habitLogs);
 
-    // 3. Send to Python AI service (e.g., http://localhost:5001/analyze)
+    // 3. Send to Python AI service (configurable URL)
     RestTemplate restTemplate = new RestTemplate();
-    String aiServiceUrl = "http://localhost:5001/analyze";
+    String aiServiceBase = Optional.ofNullable(System.getenv("AI_SERVICE_URL")).orElse("http://localhost:5001");
+    String aiServiceUrl = aiServiceBase + "/analyze";
     Map<String, Object> aiResponse = restTemplate.postForObject(aiServiceUrl, aiRequest, Map.class);
 
     // 4. Return AI insights to frontend
@@ -70,7 +72,8 @@ public class AiInsightsController {
     aiRequest.put("message", message);
     aiRequest.put("history", history);
     RestTemplate restTemplate = new RestTemplate();
-    String aiServiceUrl = "http://localhost:5001/chat";
+    String aiServiceBase = Optional.ofNullable(System.getenv("AI_SERVICE_URL")).orElse("http://localhost:5001");
+    String aiServiceUrl = aiServiceBase + "/chat";
     Map<String, Object> aiResponse = restTemplate.postForObject(aiServiceUrl, aiRequest, Map.class);
     return ResponseEntity.ok(aiResponse);
   }

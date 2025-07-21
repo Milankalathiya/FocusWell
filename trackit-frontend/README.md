@@ -219,6 +219,13 @@ The application uses Tailwind CSS with:
 
 3. **Update environment variables** for production backend URL
 
+## Deployment (Netlify)
+
+1. Set the environment variable `VITE_API_URL` in Netlify to your backend API URL (e.g., `https://your-backend-url/api`).
+2. Push your code to GitHub and connect the repo to Netlify.
+3. Netlify will build and deploy automatically.
+4. If you use a custom domain, update CORS on the backend.
+
 ## Contributing
 
 1. Fork the repository
