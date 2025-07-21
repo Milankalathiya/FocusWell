@@ -68,7 +68,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://thriving-dodol-6918f9.netlify.app")); // your frontend URL
+        configuration.setAllowedOrigins(List.of("https://687e3410b745b70008cb0c8e--thriving-dodol-6918f9.netlify.app")); // your frontend URL
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
