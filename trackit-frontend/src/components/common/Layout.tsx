@@ -10,15 +10,15 @@ import {
 } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 
-const menuItems = [
-  { path: '/dashboard', icon: <FaChartPie />, text: 'Dashboard' },
-  { path: '/projects', icon: <FaThLarge />, text: 'Projects' },
-  { path: '/tasks', icon: <FaTasks />, text: 'Tasks' },
-  { path: '/timelog', icon: <FaClock />, text: 'Time log' },
-  { path: '/resources', icon: <FaUsers />, text: 'Resource mgnt' },
-  { path: '/users', icon: <FaUser />, text: 'Users' },
-  { path: '/templates', icon: <FaThLarge />, text: 'Project template' },
-];
+// const menuItems = [
+//   { path: '/dashboard', icon: <FaChartPie />, text: 'Dashboard' },
+//   { path: '/projects', icon: <FaThLarge />, text: 'Projects' },
+//   { path: '/tasks', icon: <FaTasks />, text: 'Tasks' },
+//   { path: '/timelog', icon: <FaClock />, text: 'Time log' },
+//   { path: '/resources', icon: <FaUsers />, text: 'Resource mgnt' },
+//   { path: '/users', icon: <FaUser />, text: 'Users' },
+//   { path: '/templates', icon: <FaThLarge />, text: 'Project template' },
+// ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
