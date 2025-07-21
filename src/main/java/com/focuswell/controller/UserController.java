@@ -32,6 +32,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    private final CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    public UserController(CustomUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Autowired
     private JwtUtil jwtUtil;
     private final UserRepository userRepository;
