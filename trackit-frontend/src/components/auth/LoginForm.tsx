@@ -85,7 +85,7 @@ const LoginForm: React.FC = () => {
               Welcome back
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Sign in to your TrackIt account
+              Sign in to your FocusWell account
             </Typography>
           </Box>
 

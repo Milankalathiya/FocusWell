@@ -136,7 +136,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             letterSpacing: '-0.02em',
           }}
         >
-          TrackIt
+          FocusWell
         </Typography>
       </Box>
 
@@ -290,7 +290,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             }}
           >
             {menuItems.find((item) => item.path === location.pathname)?.text ||
-              'TrackIt'}
+              'FocusWell'}
           </Typography>
 
           {/* Mobile User Menu */}
