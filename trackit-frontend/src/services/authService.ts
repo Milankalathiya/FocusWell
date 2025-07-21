@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import api from './api';
 
-const API_BASE_URL = 'http://localhost:8080/api/users';
+const API_BASE_URL = 'https://focuswell-production.up.railway.app/api/users';
 
 export const authService = {
   async register(data: RegisterRequest): Promise<User> {
