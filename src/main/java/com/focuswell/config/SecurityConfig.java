@@ -73,7 +73,7 @@ public class SecurityConfig {
         public CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
                 // Read allowed origin from environment variable
-                String frontendUrl = Optional.ofNullable(System.getenv("FRONTEND_URL"))
+                String frontendUrl = Optional.ofNullable(System.getenv("https://focuswell-frontend.netlify.app"))
                                 .orElse("http://localhost:5173");
                 configuration.setAllowedOrigins(Arrays.asList(frontendUrl));
                 configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
