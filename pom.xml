@@ -8,10 +8,10 @@
 		<version>3.4.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.trackit</groupId>
-	<artifactId>trackit</artifactId>
+	<groupId>com.focuswell</groupId>
+	<artifactId>focuswell</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Trackit</name>
+	<name>FocusWell</name>
 	<description>A daily task &amp; habit tracker</description>
 	<url/>
 	<licenses>

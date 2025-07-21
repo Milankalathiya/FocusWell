@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "TrackIt API Tests",
-    "description": "Comprehensive API testing for the enhanced TrackIt backend",
+    "name": "FocusWell API Tests",
+    "description": "Comprehensive API testing for the enhanced FocusWell backend",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -118,7 +118,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Complete Project Documentation\",\n  \"description\": \"Write comprehensive documentation for the TrackIt project\",\n  \"dueDate\": \"2024-01-15\",\n  \"priority\": \"HIGH\",\n  \"repeatType\": \"NONE\",\n  \"category\": \"Work\",\n  \"estimatedHours\": 4,\n  \"actualHours\": null\n}"
+              "raw": "{\n  \"title\": \"Complete Project Documentation\",\n  \"description\": \"Write comprehensive documentation for the FocusWell project\",\n  \"dueDate\": \"2024-01-15\",\n  \"priority\": \"HIGH\",\n  \"repeatType\": \"NONE\",\n  \"category\": \"Work\",\n  \"estimatedHours\": 4,\n  \"actualHours\": null\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/tasks",

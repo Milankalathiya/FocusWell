@@ -68,5 +68,5 @@ export const DATE_FORMATS = {
   API_WITH_TIME: "yyyy-MM-dd'T'HH:mm:ss",
 } as const;
 
-export const TOKEN_KEY = 'trackit_token';
-export const USER_KEY = 'trackit_user';
+export const TOKEN_KEY = 'focuswell_token';
+export const USER_KEY = 'focuswell_user';
