@@ -117,14 +117,17 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<User> getProfile(Authentication authentication) {
-        String username = authentication.getName(); // Extracted from JWT
-        Optional<User> optionalUser = userService.findByUsername(username);
-
-        if (optionalUser.isPresent()) {
-            return ResponseEntity.ok(optionalUser.get());
-        } else {
-            // User not found - return 404 Not Found
-            return ResponseEntity.notFound().build();
+        try {
+            String username = authentication.getName();
+            User user = userDetailsService.findByUsername(username);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            // Log the error for debugging
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching profile: " + e.getMessage());
         }
     }
 
