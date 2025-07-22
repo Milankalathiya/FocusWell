@@ -59,6 +59,7 @@ def chat():
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
+    print("Analyze endpoint hit")
     data = request.json
     wellness_data = data.get('wellnessData', [])
     tasks = data.get('tasks', [])
