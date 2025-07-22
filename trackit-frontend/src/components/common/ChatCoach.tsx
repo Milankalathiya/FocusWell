@@ -41,7 +41,7 @@ const ChatCoach: React.FC = () => {
     setInput('');
     setLoading(true);
     try {
-      const res = await api.post('/api/ai/chat', {
+      const res = await api.post('/ai/chat', {
         message: input,
         history: messages,
       });
