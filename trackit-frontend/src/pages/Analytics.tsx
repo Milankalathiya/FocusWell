@@ -80,8 +80,6 @@ const AnalyticsPage: React.FC = () => {
     fetchAnalytics();
   }, [dateRange]);
 
-  console.log('AnalyticsPage rendered, dateRange:', dateRange);
-
   const taskCompletionRate = analytics?.totalTasks
     ? (analytics.completedTasks / analytics.totalTasks) * 100
     : 0;
@@ -122,10 +120,6 @@ const AnalyticsPage: React.FC = () => {
         total: analytics?.activeHabits || 0,
       };
     }) || [];
-
-  useEffect(() => {
-    console.log('Fallback useEffect running');
-  }, []);
 
   if (loading || aiLoading) {
     return (
@@ -187,33 +181,34 @@ const AnalyticsPage: React.FC = () => {
   }
 
   return (
-    <Paper
+    <Box
       sx={{
-        p: { xs: 2, md: 4 },
-        borderRadius: 4,
-        boxShadow: 3,
-        mb: 4,
-        background: '#fafbfc',
+        p: { xs: 1, md: 3 },
+        maxWidth: 1200,
+        mx: 'auto',
+        width: '100%',
       }}
     >
       {/* AI Insights Section */}
       {aiInsights && (
         <Paper
           sx={{
-            p: 3,
+            p: { xs: 2, md: 3 },
             mb: 4,
             borderLeft: '6px solid #6366f1',
-            background: 'background.paper',
+            background: '#f8fafc',
             color: 'text.primary',
             display: 'flex',
             alignItems: 'flex-start',
             gap: 2,
             boxShadow: 1,
             borderRadius: 3,
+            overflowX: 'auto',
+            maxWidth: '100%',
           }}
         >
           <InfoOutlinedIcon sx={{ fontSize: 40, color: '#6366f1', mt: 0.5 }} />
-          <Box>
+          <Box sx={{ overflowX: 'auto' }}>
             <Typography variant="h6" fontWeight={700} gutterBottom>
               AI Wellness Insights
             </Typography>
@@ -290,6 +285,7 @@ const AnalyticsPage: React.FC = () => {
               boxShadow: 2,
               textAlign: 'center',
               background: '#fff',
+              minWidth: 180,
             }}
           >
             <Typography color="text.secondary" variant="subtitle2">
@@ -308,6 +304,7 @@ const AnalyticsPage: React.FC = () => {
               boxShadow: 2,
               textAlign: 'center',
               background: '#fff',
+              minWidth: 180,
             }}
           >
             <Typography color="text.secondary" variant="subtitle2">
@@ -326,6 +323,7 @@ const AnalyticsPage: React.FC = () => {
               boxShadow: 2,
               textAlign: 'center',
               background: '#fff',
+              minWidth: 180,
             }}
           >
             <Typography color="text.secondary" variant="subtitle2">
@@ -344,6 +342,7 @@ const AnalyticsPage: React.FC = () => {
               boxShadow: 2,
               textAlign: 'center',
               background: '#fff',
+              minWidth: 180,
             }}
           >
             <Typography color="text.secondary" variant="subtitle2">
@@ -538,7 +537,7 @@ const AnalyticsPage: React.FC = () => {
           </Grid>
         )}
       </Grid>
-    </Paper>
+    </Box>
   );
 };
 
