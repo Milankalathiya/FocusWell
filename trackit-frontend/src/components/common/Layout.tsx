@@ -27,6 +27,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import TaskIcon from '@mui/icons-material/Task';
 import PersonIcon from '@mui/icons-material/Person';
+import { useAuth } from '../contexts/AuthContext'; 
 
 // Example routes (replace with your actual routes/constants)
 const ROUTES = {
@@ -75,7 +76,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   // Example user (replace with your auth logic)
-  const user = { username: 'Alex meian', email: 'alex@example.com' };
+  const { state } = useAuth();
+  const user = state.user;
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
