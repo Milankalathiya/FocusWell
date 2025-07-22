@@ -80,4 +80,9 @@ public class AiInsightsController {
     Map<String, Object> aiResponse = restTemplate.postForObject(aiServiceUrl, aiRequest, Map.class);
     return ResponseEntity.ok(aiResponse);
   }
+
+  @GetMapping("/chat")
+  public ResponseEntity<?> chatGetDebug() {
+      return ResponseEntity.badRequest().body("Use POST for chat endpoint");
+  }
 }
