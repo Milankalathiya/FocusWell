@@ -1,7 +1,13 @@
+import TaskIcon from '@mui/icons-material/Assignment';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import {
   Alert,
   Box,
+  Card,
+  CardContent,
   CircularProgress,
   Divider,
   FormControl,
@@ -180,6 +186,80 @@ const AnalyticsPage: React.FC = () => {
     );
   }
 
+  // StatCard for consistent style
+  const StatCard = ({
+    title,
+    value,
+    icon,
+    color,
+    subtitle,
+  }: {
+    title: string;
+    value: string | number;
+    icon: React.ReactNode;
+    color: string;
+    subtitle?: string;
+  }) => (
+    <Card
+      sx={{
+        background: 'var(--bg-card)',
+        borderRadius: 'var(--radius-lg)',
+        border: '1px solid var(--border-light)',
+        boxShadow: 'var(--shadow-sm)',
+        textAlign: 'center',
+        minWidth: 180,
+        transition: 'all var(--transition-normal)',
+        '&:hover': {
+          boxShadow: 'var(--shadow-md)',
+          transform: 'translateY(-2px)',
+        },
+      }}
+    >
+      <CardContent sx={{ p: 3 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mb: 2,
+          }}
+        >
+          <Box
+            sx={{
+              p: 1.5,
+              borderRadius: 'var(--radius-md)',
+              background: `${color}15`,
+              color: color,
+              mr: 2,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {icon}
+          </Box>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 600, color: 'var(--text-primary)' }}
+          >
+            {title}
+          </Typography>
+        </Box>
+        <Typography
+          variant="h3"
+          sx={{ fontWeight: 700, mb: 1, color: 'var(--text-primary)' }}
+        >
+          {value}
+        </Typography>
+        {subtitle && (
+          <Typography variant="body2" sx={{ color: 'var(--text-secondary)' }}>
+            {subtitle}
+          </Typography>
+        )}
+      </CardContent>
+    </Card>
+  );
+
   return (
     <Box
       sx={{
@@ -276,209 +356,174 @@ const AnalyticsPage: React.FC = () => {
         </FormControl>
       </Box>
       <Divider sx={{ mb: 3 }} />
+      {/* Stat Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={12} sm={6} md={3}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              boxShadow: 2,
-              textAlign: 'center',
-              background: '#fff',
-              minWidth: 180,
-            }}
-          >
-            <Typography color="text.secondary" variant="subtitle2">
-              Total Tasks
-            </Typography>
-            <Typography variant="h4" fontWeight={700} color="primary">
-              {analytics?.totalTasks || 0}
-            </Typography>
-          </Paper>
+          <StatCard
+            title="Total Tasks"
+            value={analytics?.totalTasks || 0}
+            icon={<TaskIcon sx={{ fontSize: 28 }} />}
+            color="#6366f1"
+            subtitle={`${analytics?.completedTasks || 0} completed`}
+          />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              boxShadow: 2,
-              textAlign: 'center',
-              background: '#fff',
-              minWidth: 180,
-            }}
-          >
-            <Typography color="text.secondary" variant="subtitle2">
-              Completion Rate
-            </Typography>
-            <Typography variant="h4" fontWeight={700} color="success.main">
-              {Math.round(taskCompletionRate)}%
-            </Typography>
-          </Paper>
+          <StatCard
+            title="Completion Rate"
+            value={`${Math.round(taskCompletionRate)}%`}
+            icon={<CheckCircleIcon sx={{ fontSize: 28 }} />}
+            color="#10B981"
+            subtitle="of tasks completed"
+          />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              boxShadow: 2,
-              textAlign: 'center',
-              background: '#fff',
-              minWidth: 180,
-            }}
-          >
-            <Typography color="text.secondary" variant="subtitle2">
-              Active Habits
-            </Typography>
-            <Typography variant="h4" fontWeight={700} color="secondary">
-              {analytics?.activeHabits || 0}
-            </Typography>
-          </Paper>
+          <StatCard
+            title="Active Habits"
+            value={analytics?.activeHabits || 0}
+            icon={<FavoriteIcon sx={{ fontSize: 28 }} />}
+            color="#8B5CF6"
+            subtitle="Current active habits"
+          />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              boxShadow: 2,
-              textAlign: 'center',
-              background: '#fff',
-              minWidth: 180,
-            }}
-          >
-            <Typography color="text.secondary" variant="subtitle2">
-              Consistency Score
-            </Typography>
-            <Typography variant="h4" fontWeight={700} color="info.main">
-              {Math.round((analytics?.consistencyScore || 0) * 100)}%
-            </Typography>
-          </Paper>
+          <StatCard
+            title="Consistency Score"
+            value={`${Math.round((analytics?.consistencyScore || 0) * 100)}%`}
+            icon={<TrendingUpIcon sx={{ fontSize: 28 }} />}
+            color="#0ea5e9"
+            subtitle="Habit consistency"
+          />
         </Grid>
       </Grid>
+      {/* Charts Section */}
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <Paper
+          <Card
             sx={{
-              p: 3,
-              height: 350,
-              borderRadius: 3,
-              boxShadow: 1,
-              background: '#fff',
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--border-light)',
+              boxShadow: 'var(--shadow-sm)',
+              height: 370,
             }}
           >
-            <Typography variant="h6" gutterBottom>
-              Task Completion Trend
-            </Typography>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={taskCompletion}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="date"
-                  tickFormatter={(value) =>
-                    new Date(value).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                    })
-                  }
-                />
-                <YAxis />
-                <Tooltip
-                  labelFormatter={(value) =>
-                    new Date(value).toLocaleDateString()
-                  }
-                />
-                <Bar dataKey="completed" fill="#10B981" name="Completed" />
-                <Bar dataKey="total" fill="#E5E7EB" name="Total" />
-                <Legend />
-              </BarChart>
-            </ResponsiveContainer>
-          </Paper>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Task Completion Trend
+              </Typography>
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={taskCompletion}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="date"
+                    tickFormatter={(value) =>
+                      new Date(value).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                      })
+                    }
+                  />
+                  <YAxis />
+                  <Tooltip
+                    labelFormatter={(value) =>
+                      new Date(value).toLocaleDateString()
+                    }
+                  />
+                  <Bar dataKey="completed" fill="#10B981" name="Completed" />
+                  <Bar dataKey="total" fill="#E5E7EB" name="Total" />
+                  <Legend />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Paper
+          <Card
             sx={{
-              p: 3,
-              height: 350,
-              borderRadius: 3,
-              boxShadow: 1,
-              background: '#fff',
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--border-light)',
+              boxShadow: 'var(--shadow-sm)',
+              height: 370,
             }}
           >
-            <Typography variant="h6" gutterBottom>
-              Task Status Distribution
-            </Typography>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </Paper>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Task Status Distribution
+              </Typography>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
         </Grid>
         <Grid item xs={12} md={12}>
-          <Paper
+          <Card
             sx={{
-              p: 3,
-              height: 350,
-              borderRadius: 3,
-              boxShadow: 1,
-              background: '#fff',
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--border-light)',
+              boxShadow: 'var(--shadow-sm)',
+              height: 370,
             }}
           >
-            <Typography variant="h6" gutterBottom>
-              Habit Consistency
-            </Typography>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart data={habitConsistency}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="date"
-                  tickFormatter={(value) =>
-                    new Date(value).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                    })
-                  }
-                />
-                <YAxis />
-                <Tooltip
-                  labelFormatter={(value) =>
-                    new Date(value).toLocaleDateString()
-                  }
-                />
-                <Line
-                  type="monotone"
-                  dataKey="logged"
-                  stroke="#8B5CF6"
-                  strokeWidth={2}
-                  dot={{ fill: '#8B5CF6' }}
-                  name="Logged"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="total"
-                  stroke="#E5E7EB"
-                  strokeWidth={2}
-                  strokeDasharray="5 5"
-                  dot={{ fill: '#E5E7EB' }}
-                  name="Total"
-                />
-                <Legend />
-              </LineChart>
-            </ResponsiveContainer>
-          </Paper>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Habit Consistency
+              </Typography>
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={habitConsistency}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="date"
+                    tickFormatter={(value) =>
+                      new Date(value).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                      })
+                    }
+                  />
+                  <YAxis />
+                  <Tooltip
+                    labelFormatter={(value) =>
+                      new Date(value).toLocaleDateString()
+                    }
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="logged"
+                    stroke="#8B5CF6"
+                    strokeWidth={2}
+                    dot={{ fill: '#8B5CF6' }}
+                    name="Logged"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="total"
+                    stroke="#E5E7EB"
+                    strokeWidth={2}
+                    strokeDasharray="5 5"
+                    dot={{ fill: '#E5E7EB' }}
+                    name="Total"
+                  />
+                  <Legend />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
       <Grid container spacing={3} sx={{ mt: 4 }}>
