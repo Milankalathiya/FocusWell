@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,8 @@ public class AiInsightsController {
   private UserService userService;
   @Autowired
   private HabitLogRepository habitLogRepository;
+  @Value("${AI_SERVICE_URL}")
+  private String aiServiceBase;
 
   @PostMapping("/insights")
   public ResponseEntity<?> getAiInsights(@AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -55,7 +58,7 @@ public class AiInsightsController {
 
     // 3. Send to Python AI service (configurable URL)
     RestTemplate restTemplate = new RestTemplate();
-    String aiServiceBase = Optional.ofNullable(System.getenv("AI_SERVICE_URL")).orElse("http://localhost:5001");
+    //String aiServiceBase = Optional.ofNullable(System.getenv("AI_SERVICE_URL")).orElse("http://localhost:5001");
     String aiServiceUrl = aiServiceBase + "/analyze";
     Map<String, Object> aiResponse = restTemplate.postForObject(aiServiceUrl, aiRequest, Map.class);
 
@@ -72,7 +75,7 @@ public class AiInsightsController {
     aiRequest.put("message", message);
     aiRequest.put("history", history);
     RestTemplate restTemplate = new RestTemplate();
-    String aiServiceBase = Optional.ofNullable(System.getenv("AI_SERVICE_URL")).orElse("http://localhost:5001");
+    // String aiServiceBase = Optional.ofNullable(System.getenv("AI_SERVICE_URL")).orElse("http://localhost:5001");
     String aiServiceUrl = aiServiceBase + "/chat";
     Map<String, Object> aiResponse = restTemplate.postForObject(aiServiceUrl, aiRequest, Map.class);
     return ResponseEntity.ok(aiResponse);
