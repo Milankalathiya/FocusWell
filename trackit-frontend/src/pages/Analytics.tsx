@@ -3,6 +3,7 @@ import {
   Alert,
   Box,
   CircularProgress,
+  Divider,
   FormControl,
   Grid,
   InputLabel,
@@ -54,7 +55,7 @@ const AnalyticsPage: React.FC = () => {
       try {
         const res = await api.post('/api/ai/insights');
         setAiInsights(res.data);
-      } catch (err) {
+      } catch {
         setAiError('Failed to fetch AI insights');
       } finally {
         setAiLoading(false);
@@ -70,7 +71,7 @@ const AnalyticsPage: React.FC = () => {
       try {
         const analyticsData = await analyticsService.getAnalytics(dateRange);
         setAnalytics(analyticsData);
-      } catch (err: any) {
+      } catch {
         setError('Failed to fetch analytics');
       } finally {
         setLoading(false);
@@ -147,9 +148,55 @@ const AnalyticsPage: React.FC = () => {
     return <Alert severity="error">{aiError}</Alert>;
   }
 
+  // Empty state for no data
+  if (!analytics || analytics.totalTasks === 0) {
+    return (
+      <Box
+        sx={{
+          p: { xs: 2, md: 5 },
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          minHeight: 400,
+        }}
+      >
+        <Typography variant="h4" fontWeight={700} gutterBottom>
+          Analytics
+        </Typography>
+        <Typography color="text.secondary" sx={{ mb: 4 }}>
+          Track your productivity and progress
+        </Typography>
+        <Paper
+          sx={{
+            p: 4,
+            borderRadius: 4,
+            boxShadow: 2,
+            textAlign: 'center',
+            maxWidth: 500,
+          }}
+        >
+          <Typography variant="h6" gutterBottom>
+            No data available
+          </Typography>
+          <Typography color="text.secondary">
+            Start by adding tasks and habits to see your analytics here!
+          </Typography>
+        </Paper>
+      </Box>
+    );
+  }
+
   return (
-    <Box sx={{ p: { xs: 1, md: 3 } }}>
-      {/* AI Insights Section - Restyled and Fixed DOM nesting */}
+    <Paper
+      sx={{
+        p: { xs: 2, md: 4 },
+        borderRadius: 4,
+        boxShadow: 3,
+        mb: 4,
+        background: '#fafbfc',
+      }}
+    >
+      {/* AI Insights Section */}
       {aiInsights && (
         <Paper
           sx={{
@@ -161,6 +208,8 @@ const AnalyticsPage: React.FC = () => {
             display: 'flex',
             alignItems: 'flex-start',
             gap: 2,
+            boxShadow: 1,
+            borderRadius: 3,
           }}
         >
           <InfoOutlinedIcon sx={{ fontSize: 40, color: '#6366f1', mt: 0.5 }} />
@@ -179,7 +228,7 @@ const AnalyticsPage: React.FC = () => {
                 <b>Insights:</b>
               </Typography>
               <ul style={{ margin: 0, paddingLeft: 18 }}>
-                {aiInsights.insights.map((insight, idx) => (
+                {(aiInsights.insights || []).map((insight, idx) => (
                   <li key={idx}>{insight}</li>
                 ))}
               </ul>
@@ -189,7 +238,10 @@ const AnalyticsPage: React.FC = () => {
                 <b>Recommendations:</b>
               </Typography>
               <ul style={{ margin: 0, paddingLeft: 18 }}>
-                {aiInsights.recommendations.split('\n').map((rec, idx) => (
+                {(aiInsights.recommendations
+                  ? aiInsights.recommendations.split('\n')
+                  : []
+                ).map((rec, idx) => (
                   <li key={idx}>{rec}</li>
                 ))}
               </ul>
@@ -228,43 +280,76 @@ const AnalyticsPage: React.FC = () => {
           </Select>
         </FormControl>
       </Box>
+      <Divider sx={{ mb: 3 }} />
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 3 }}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              boxShadow: 2,
+              textAlign: 'center',
+              background: '#fff',
+            }}
+          >
             <Typography color="text.secondary" variant="subtitle2">
               Total Tasks
             </Typography>
-            <Typography variant="h4" fontWeight={700}>
+            <Typography variant="h4" fontWeight={700} color="primary">
               {analytics?.totalTasks || 0}
             </Typography>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 3 }}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              boxShadow: 2,
+              textAlign: 'center',
+              background: '#fff',
+            }}
+          >
             <Typography color="text.secondary" variant="subtitle2">
               Completion Rate
             </Typography>
-            <Typography variant="h4" fontWeight={700}>
+            <Typography variant="h4" fontWeight={700} color="success.main">
               {Math.round(taskCompletionRate)}%
             </Typography>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 3 }}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              boxShadow: 2,
+              textAlign: 'center',
+              background: '#fff',
+            }}
+          >
             <Typography color="text.secondary" variant="subtitle2">
               Active Habits
             </Typography>
-            <Typography variant="h4" fontWeight={700}>
+            <Typography variant="h4" fontWeight={700} color="secondary">
               {analytics?.activeHabits || 0}
             </Typography>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 3 }}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              boxShadow: 2,
+              textAlign: 'center',
+              background: '#fff',
+            }}
+          >
             <Typography color="text.secondary" variant="subtitle2">
               Consistency Score
             </Typography>
-            <Typography variant="h4" fontWeight={700}>
+            <Typography variant="h4" fontWeight={700} color="info.main">
               {Math.round((analytics?.consistencyScore || 0) * 100)}%
             </Typography>
           </Paper>
@@ -272,7 +357,15 @@ const AnalyticsPage: React.FC = () => {
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3, height: 350 }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: 350,
+              borderRadius: 3,
+              boxShadow: 1,
+              background: '#fff',
+            }}
+          >
             <Typography variant="h6" gutterBottom>
               Task Completion Trend
             </Typography>
@@ -302,7 +395,15 @@ const AnalyticsPage: React.FC = () => {
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3, height: 350 }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: 350,
+              borderRadius: 3,
+              boxShadow: 1,
+              background: '#fff',
+            }}
+          >
             <Typography variant="h6" gutterBottom>
               Task Status Distribution
             </Typography>
@@ -328,7 +429,15 @@ const AnalyticsPage: React.FC = () => {
           </Paper>
         </Grid>
         <Grid item xs={12} md={12}>
-          <Paper sx={{ p: 3, height: 350 }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: 350,
+              borderRadius: 3,
+              boxShadow: 1,
+              background: '#fff',
+            }}
+          >
             <Typography variant="h6" gutterBottom>
               Habit Consistency
             </Typography>
@@ -381,6 +490,8 @@ const AnalyticsPage: React.FC = () => {
                 p: 3,
                 background: 'linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)',
                 color: 'white',
+                borderRadius: 3,
+                boxShadow: 2,
               }}
             >
               <Typography variant="h6" gutterBottom>
@@ -406,6 +517,8 @@ const AnalyticsPage: React.FC = () => {
                 p: 3,
                 background: 'linear-gradient(90deg, #f093fb 0%, #f5576c 100%)',
                 color: 'white',
+                borderRadius: 3,
+                boxShadow: 2,
               }}
             >
               <Typography variant="h6" gutterBottom>
@@ -425,7 +538,7 @@ const AnalyticsPage: React.FC = () => {
           </Grid>
         )}
       </Grid>
-    </Box>
+    </Paper>
   );
 };
 
