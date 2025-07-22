@@ -403,16 +403,16 @@ const AnalyticsPage: React.FC = () => {
               borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--border-light)',
               boxShadow: 'var(--shadow-sm)',
-              height: 400, // Increased height for better visibility
+              height: 450, // Increased height significantly
             }}
           >
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Task Completion Trend
               </Typography>
-              <ResponsiveContainer width="100%" height={300}> {/* Increased height */}
+              <ResponsiveContainer width="100%" height={350}> {/* Increased height */}
                 <BarChart data={taskCompletion}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#D3D3D3" />
                   <XAxis
                     dataKey="date"
                     tickFormatter={(value) =>
@@ -421,18 +421,19 @@ const AnalyticsPage: React.FC = () => {
                         day: 'numeric',
                       })
                     }
-                    style={{ fontSize: '12px' }}
+                    style={{ fontSize: '14px', fontWeight: 'bold' }}
+                    interval={0} // Show all labels
                   />
-                  <YAxis style={{ fontSize: '12px' }} />
+                  <YAxis style={{ fontSize: '14px', fontWeight: 'bold' }} />
                   <Tooltip
                     labelFormatter={(value) =>
                       new Date(value).toLocaleDateString()
                     }
-                    contentStyle={{ fontSize: '12px' }}
+                    contentStyle={{ fontSize: '14px', fontWeight: 'bold' }}
                   />
-                  <Bar dataKey="completed" fill="#10B981" name="Completed" barSize={20} /> {/* Adjusted bar size */}
-                  <Bar dataKey="total" fill="#E5E7EB" name="Total" barSize={20} />
-                  <Legend wrapperStyle={{ fontSize: '12px' }} />
+                  <Bar dataKey="completed" fill="#10B981" name="Completed" barSize={30} /> {/* Thicker bars */}
+                  <Bar dataKey="total" fill="#E5E7EB" name="Total" barSize={30} />
+                  <Legend wrapperStyle={{ fontSize: '14px', fontWeight: 'bold' }} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -444,32 +445,33 @@ const AnalyticsPage: React.FC = () => {
               borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--border-light)',
               boxShadow: 'var(--shadow-sm)',
-              height: 400, // Increased height for better visibility
+              height: 450, // Increased height significantly
             }}
           >
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Task Status Distribution
               </Typography>
-              <ResponsiveContainer width="100%" height={300}> {/* Increased height */}
+              <ResponsiveContainer width="100%" height={350}> {/* Increased height */}
                 <PieChart>
                   <Pie
                     data={pieData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={70} // Increased inner radius for better visibility
-                    outerRadius={120} // Increased outer radius
+                    innerRadius={80} // Larger inner radius
+                    outerRadius={140} // Larger outer radius
                     paddingAngle={5}
                     dataKey="value"
-                    labelLine={false} // Removed label lines for cleaner look
-                    label={({ name, value }) => `${name}: ${value}`} // Added labels inside pie
+                    label={({ name, value }) => `${name}: ${value}`} // Clear labels
+                    labelLine={false}
+                    labelStyle={{ fontSize: '14px', fontWeight: 'bold', fill: '#333' }}
                   >
                     {pieData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip contentStyle={{ fontSize: '12px' }} />
-                  <Legend wrapperStyle={{ fontSize: '12px' }} />
+                  <Tooltip contentStyle={{ fontSize: '14px', fontWeight: 'bold' }} />
+                  <Legend wrapperStyle={{ fontSize: '14px', fontWeight: 'bold' }} />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
@@ -481,16 +483,16 @@ const AnalyticsPage: React.FC = () => {
               borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--border-light)',
               boxShadow: 'var(--shadow-sm)',
-              height: 400, // Increased height for better visibility
+              height: 450, // Increased height significantly
             }}
           >
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Habit Consistency
               </Typography>
-              <ResponsiveContainer width="100%" height={300}> {/* Increased height */}
+              <ResponsiveContainer width="100%" height={350}> {/* Increased height */}
                 <LineChart data={habitConsistency}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#D3D3D3" />
                   <XAxis
                     dataKey="date"
                     tickFormatter={(value) =>
@@ -499,21 +501,22 @@ const AnalyticsPage: React.FC = () => {
                         day: 'numeric',
                       })
                     }
-                    style={{ fontSize: '12px' }}
+                    style={{ fontSize: '14px', fontWeight: 'bold' }}
+                    interval={0} // Show all labels
                   />
-                  <YAxis style={{ fontSize: '12px' }} />
+                  <YAxis style={{ fontSize: '14px', fontWeight: 'bold' }} />
                   <Tooltip
                     labelFormatter={(value) =>
                       new Date(value).toLocaleDateString()
                     }
-                    contentStyle={{ fontSize: '12px' }}
+                    contentStyle={{ fontSize: '14px', fontWeight: 'bold' }}
                   />
                   <Line
                     type="monotone"
                     dataKey="logged"
                     stroke="#8B5CF6"
-                    strokeWidth={3} // Increased stroke width for visibility
-                    dot={{ fill: '#8B5CF6', r: 4 }} // Increased dot size
+                    strokeWidth={4} // Thicker line
+                    dot={{ fill: '#8B5CF6', r: 6 }} // Larger dots
                     name="Logged"
                   />
                   <Line
@@ -522,10 +525,10 @@ const AnalyticsPage: React.FC = () => {
                     stroke="#E5E7EB"
                     strokeWidth={2}
                     strokeDasharray="5 5"
-                    dot={{ fill: '#E5E7EB', r: 3 }}
+                    dot={{ fill: '#E5E7EB', r: 4 }}
                     name="Total"
                   />
-                  <Legend wrapperStyle={{ fontSize: '12px' }} />
+                  <Legend wrapperStyle={{ fontSize: '14px', fontWeight: 'bold' }} />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
