@@ -2,7 +2,7 @@ import { WellnessData, WellnessDataRequest, WellnessStats } from '../types';
 import api from './api';
 
 class WellnessService {
-  private baseUrl = '/wellness';
+  private baseUrl = '/api/wellness';
 
   async saveWellnessData(data: WellnessDataRequest): Promise<WellnessData> {
     const response = await api.post(`${this.baseUrl}/data`, data);
