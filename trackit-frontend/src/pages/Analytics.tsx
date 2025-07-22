@@ -264,8 +264,7 @@ const AnalyticsPage: React.FC = () => {
     <Box
       sx={{
         p: { xs: 1, md: 3 },
-        maxWidth: 1200,
-        mx: 'auto',
+        maxWidth: '100%',
         width: '100%',
         backgroundColor: '#F9FAFB', // Light background for contrast
         borderRadius: '12px', // Rounded edges for the main container
@@ -403,8 +402,12 @@ const AnalyticsPage: React.FC = () => {
         </Grid>
       </Grid>
       {/* Charts Section - 2 columns, full width */}
-      <Grid container spacing={4} sx={{ mb: 6, overflow: 'visible' }}>
-        <Grid item xs={12} md={6}>
+      <Grid
+        container
+        spacing={4}
+        sx={{ mb: 6, overflow: 'visible', width: '100%' }}
+      >
+        <Grid item xs={12} md={6} sx={{ width: '100%' }}>
           <Card
             sx={{
               borderRadius: '12px',
@@ -489,7 +492,7 @@ const AnalyticsPage: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} sx={{ width: '100%' }}>
           <Card
             sx={{
               borderRadius: '12px',
@@ -555,7 +558,7 @@ const AnalyticsPage: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} sx={{ width: '100%' }}>
           <Card
             sx={{
               borderRadius: '12px',
