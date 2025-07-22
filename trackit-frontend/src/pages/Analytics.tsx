@@ -52,7 +52,7 @@ const AnalyticsPage: React.FC = () => {
       setAiLoading(true);
       setAiError(null);
       try {
-        const res = await api.post('/ai/insights');
+        const res = await api.post('/api/ai/insights');
         setAiInsights(res.data);
       } catch (err) {
         setAiError('Failed to fetch AI insights');
