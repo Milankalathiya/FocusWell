@@ -4,7 +4,7 @@ import api from './api';
 export const analyticsService = {
   async getAnalytics(days: number = 7): Promise<Analytics> {
     const response = await api.get<Analytics>(
-      `/analytics/summary?days=${days}`
+      `/api/analytics/summary?days=${days}`
     );
     return response.data;
   },
@@ -14,7 +14,7 @@ export const analyticsService = {
   ): Promise<{ date: string; completed: number; total: number }[]> {
     const response = await api.get<
       ApiResponse<{ date: string; completed: number; total: number }[]>
-    >(`/analytics/task-completion?days=${days}`);
+    >(`/api/analytics/task-completion?days=${days}`);
     return response.data.data;
   },
 
@@ -23,7 +23,7 @@ export const analyticsService = {
   ): Promise<{ date: string; logged: number; total: number }[]> {
     const response = await api.get<
       ApiResponse<{ date: string; logged: number; total: number }[]>
-    >(`/analytics/habit-consistency?days=${days}`);
+    >(`/api/analytics/habit-consistency?days=${days}`);
     return response.data.data;
   },
 };
