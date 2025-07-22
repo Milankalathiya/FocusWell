@@ -403,234 +403,253 @@ const AnalyticsPage: React.FC = () => {
         </Grid>
       </Grid>
       {/* Charts Section - 3 columns, full width */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={4}>
-          <Card
-            sx={{
-              borderRadius: '12px', // Larger rounded edges
-              border: '1px solid #E0E0E0', // Lighter border
-              boxShadow: '0 6px 16px rgba(0, 0, 0, 0.12)', // Stronger shadow
-              height: 500,
-              backgroundColor: '#FFFFFF', // White background
-              transition: 'transform 0.3s ease, box-shadow 0.3s ease', // Smooth hover effect
-              '&:hover': {
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
-                transform: 'translateY(-5px)',
-              },
-            }}
-          >
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
-                Task Completion Trend
-              </Typography>
-              <ResponsiveContainer width="100%" height={400}>
-                <BarChart data={taskCompletion} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                  <CartesianGrid strokeDasharray="5 5" stroke="#E0E0E0" />
-                  <XAxis
-                    dataKey="date"
-                    tickFormatter={(value) =>
-                      new Date(value).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                      })
-                    }
-                    style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}
-                    interval={0}
-                    tick={{ transform: 'translate(0, 5)' }}
-                  />
-                  <YAxis
-                    style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}
-                    tick={{ transform: 'translate(-5, 0)' }}
-                  />
-                  <Tooltip
-                    contentStyle={{ fontSize: '16px', fontWeight: 'bold', backgroundColor: '#FFF', border: '1px solid #CCC' }}
-                    itemStyle={{ color: '#333' }}
-                  />
-                  <Bar dataKey="completed" fill="#10B981" name="Completed" barSize={40} />
-                  <Bar dataKey="total" fill="#E5E7EB" name="Total" barSize={40} />
-                  <Legend wrapperStyle={{ fontSize: '16px', fontWeight: 'bold', paddingTop: '10px' }} />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card
-            sx={{
-              borderRadius: '12px', // Larger rounded edges
-              border: '1px solid #E0E0E0', // Lighter border
-              boxShadow: '0 6px 16px rgba(0, 0, 0, 0.12)', // Stronger shadow
-              height: 500,
-              backgroundColor: '#FFFFFF', // White background
-              transition: 'transform 0.3s ease, box-shadow 0.3s ease', // Smooth hover effect
-              '&:hover': {
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
-                transform: 'translateY(-5px)',
-              },
-            }}
-          >
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
-                Task Status Distribution
-              </Typography>
-              <ResponsiveContainer width="100%" height={400}>
-                <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={100}
-                    outerRadius={180}
-                    paddingAngle={5}
-                    dataKey="value"
-                    label={({ name, value }) => `${name}: ${value}`}
-                    labelLine={false}
-                    labelStyle={{ fontSize: '18px', fontWeight: 'bold', fill: '#333', textAnchor: 'middle' }}
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={{ fontSize: '16px', fontWeight: 'bold', backgroundColor: '#FFF', border: '1px solid #CCC' }} />
-                  <Legend wrapperStyle={{ fontSize: '16px', fontWeight: 'bold', paddingTop: '10px' }} />
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card
-            sx={{
-              borderRadius: '12px', // Larger rounded edges
-              border: '1px solid #E0E0E0', // Lighter border
-              boxShadow: '0 6px 16px rgba(0, 0, 0, 0.12)', // Stronger shadow
-              height: 500,
-              backgroundColor: '#FFFFFF', // White background
-              transition: 'transform 0.3s ease, box-shadow 0.3s ease', // Smooth hover effect
-              '&:hover': {
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
-                transform: 'translateY(-5px)',
-              },
-            }}
-          >
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
-                Habit Consistency
-              </Typography>
-              <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={habitConsistency} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                  <CartesianGrid strokeDasharray="5 5" stroke="#E0E0E0" />
-                  <XAxis
-                    dataKey="date"
-                    tickFormatter={(value) =>
-                      new Date(value).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                      })
-                    }
-                    style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}
-                    interval={0}
-                    tick={{ transform: 'translate(0, 5)' }}
-                  />
-                  <YAxis
-                    style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}
-                    tick={{ transform: 'translate(-5, 0)' }}
-                  />
-                  <Tooltip
-                    contentStyle={{ fontSize: '16px', fontWeight: 'bold', backgroundColor: '#FFF', border: '1px solid #CCC' }}
-                    itemStyle={{ color: '#333' }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="logged"
-                    stroke="#8B5CF6"
-                    strokeWidth={5}
-                    dot={{ fill: '#8B5CF6', r: 8 }}
-                    name="Logged"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="total"
-                    stroke="#E5E7EB"
-                    strokeWidth={3}
-                    strokeDasharray="5 5"
-                    dot={{ fill: '#E5E7EB', r: 6 }}
-                    name="Total"
-                  />
-                  <Legend wrapperStyle={{ fontSize: '16px', fontWeight: 'bold', paddingTop: '10px' }} />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-      {/* Summary Cards Section - 2 columns, full width */}
-      <Grid container spacing={3} sx={{ mt: 4 }}>
-        {analytics?.bestDay && (
-          <Grid item xs={12} md={6}>
-            <Paper
-              sx={{
-                p: 3,
-                background: 'linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)',
-                color: 'white',
-                borderRadius: '12px', // Larger rounded edges
-                boxShadow: '0 6px 16px rgba(0, 0, 0, 0.12)', // Stronger shadow
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                '&:hover': {
-                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
-                  transform: 'translateY(-5px)',
-                },
-              }}
-            >
-              <Typography variant="h6" gutterBottom>
-                🏆 Most Productive Day
-              </Typography>
-              <Typography variant="h4" fontWeight={700}>
-                {new Date(analytics.bestDay).toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                Keep up the great work!
-              </Typography>
-            </Paper>
-          </Grid>
-        )}
-        {analytics?.worstDay && (
-          <Grid item xs={12} md={6}>
-            <Paper
-              sx={{
-                p: 3,
-                background: 'linear-gradient(90deg, #f093fb 0%, #f5576c 100%)',
-                color: 'white',
-                borderRadius: '12px', // Larger rounded edges
-                boxShadow: '0 6px 16px rgba(0, 0, 0, 0.12)', // Stronger shadow
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                '&:hover': {
-                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
-                  transform: 'translateY(-5px)',
-                },
-              }}
-            >
-              <Typography variant="h6" gutterBottom>
-                😴 Least Productive Day
-              </Typography>
-              <Typography variant="h4" fontWeight={700}>
-                {new Date(analytics.worstDay).toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                You can do better!
-              </Typography>
-            </Paper>
-          </Grid>
-        )}
-      </Grid>
+      <Grid container spacing={4} sx={{ mb: 6, overflow: 'visible' }}>
+  <Grid item xs={12} md={4}>
+    <Card
+      sx={{
+        borderRadius: '12px',
+        border: '1px solid #E0E0E0',
+        boxShadow: '0 6px 16px rgba(0, 0, 0, 0.12)',
+        height: 'auto', // Changed to auto to accommodate content
+        backgroundColor: '#FFFFFF',
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        '&:hover': {
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
+          transform: 'translateY(-5px)',
+        },
+      }}
+    >
+      <CardContent>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
+          Task Completion Trend
+        </Typography>
+        <Box sx={{ height: 450, minHeight: 450 }}> {/* Fixed height with minHeight */}
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={taskCompletion} margin={{ top: 20, right: 20, bottom: 40, left: 20 }}>
+              <CartesianGrid strokeDasharray="5 5" stroke="#E0E0E0" />
+              <XAxis
+                dataKey="date"
+                tickFormatter={(value) =>
+                  new Date(value).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                  })
+                }
+                style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}
+                interval={0}
+                tick={{ transform: 'translate(0, 8)' }}
+                height={40} // Increased height for better label visibility
+              />
+              <YAxis
+                style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}
+                tick={{ transform: 'translate(-8, 0)' }}
+              />
+              <Tooltip
+                contentStyle={{ fontSize: '16px', fontWeight: 'bold', backgroundColor: '#FFF', border: '1px solid #CCC' }}
+                itemStyle={{ color: '#333' }}
+              />
+              <Bar dataKey="completed" fill="#10B981" name="Completed" barSize={40} />
+              <Bar dataKey="total" fill="#E5E7EB" name="Total" barSize={40} />
+              <Legend wrapperStyle={{ fontSize: '16px', fontWeight: 'bold', paddingTop: '15px' }} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Box>
+      </CardContent>
+    </Card>
+  </Grid>
+  <Grid item xs={12} md={4}>
+    <Card
+      sx={{
+        borderRadius: '12px',
+        border: '1px solid #E0E0E0',
+        boxShadow: '0 6px 16px rgba(0, 0, 0, 0.12)',
+        height: 'auto', // Changed to auto to accommodate content
+        backgroundColor: '#FFFFFF',
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        '&:hover': {
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
+          transform: 'translateY(-5px)',
+        },
+      }}
+    >
+      <CardContent>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
+          Task Status Distribution
+        </Typography>
+        <Box sx={{ height: 450, minHeight: 450 }}> {/* Fixed height with minHeight */}
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                innerRadius={100}
+                outerRadius={180}
+                paddingAngle={5}
+                dataKey="value"
+                label={({ name, value }) => `${name}: ${value}`}
+                labelLine={false}
+                labelStyle={{ fontSize: '18px', fontWeight: 'bold', fill: '#333', textAnchor: 'middle' }}
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip contentStyle={{ fontSize: '16px', fontWeight: 'bold', backgroundColor: '#FFF', border: '1px solid #CCC' }} />
+              <Legend wrapperStyle={{ fontSize: '16px', fontWeight: 'bold', paddingTop: '15px' }} />
+            </PieChart>
+          </ResponsiveContainer>
+        </Box>
+      </CardContent>
+    </Card>
+  </Grid>
+  <Grid item xs={12} md={4}>
+    <Card
+      sx={{
+        borderRadius: '12px',
+        border: '1px solid #E0E0E0',
+        boxShadow: '0 6px 16px rgba(0, 0, 0, 0.12)',
+        height: 'auto', // Changed to auto to accommodate content
+        backgroundColor: '#FFFFFF',
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        '&:hover': {
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
+          transform: 'translateY(-5px)',
+        },
+      }}
+    >
+      <CardContent>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
+          Habit Consistency
+        </Typography>
+        <Box sx={{ height: 450, minHeight: 450 }}> {/* Fixed height with minHeight */}
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={habitConsistency} margin={{ top: 20, right: 20, bottom: 40, left: 20 }}>
+              <CartesianGrid strokeDasharray="5 5" stroke="#E0E0E0" />
+              <XAxis
+                dataKey="date"
+                tickFormatter={(value) =>
+                  new Date(value).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                  })
+                }
+                style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}
+                interval={0}
+                tick={{ transform: 'translate(0, 8)' }}
+                height={40} // Increased height for better label visibility
+              />
+              <YAxis
+                style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}
+                tick={{ transform: 'translate(-8, 0)' }}
+              />
+              <Tooltip
+                contentStyle={{ fontSize: '16px', fontWeight: 'bold', backgroundColor: '#FFF', border: '1px solid #CCC' }}
+                itemStyle={{ color: '#333' }}
+              />
+              <Line
+                type="monotone"
+                dataKey="logged"
+                stroke="#8B5CF6"
+                strokeWidth={5}
+                dot={{ fill: '#8B5CF6', r: 8 }}
+                name="Logged"
+              />
+              <Line
+                type="monotone"
+                dataKey="total"
+                stroke="#E5E7EB"
+                strokeWidth={3}
+                strokeDasharray="5 5"
+                dot={{ fill: '#E5E7EB', r: 6 }}
+                name="Total"
+              />
+              <Legend wrapperStyle={{ fontSize: '16px', fontWeight: 'bold', paddingTop: '15px' }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </Box>
+      </CardContent>
+    </Card>
+  </Grid>
+</Grid>
+<Grid container spacing={4} sx={{ mt: 6 }}>
+  {analytics?.bestDay && (
+    <Grid item xs={12} md={6}>
+      <Paper
+        sx={{
+          p: 3,
+          background: 'linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)',
+          color: 'white',
+          borderRadius: '12px',
+          boxShadow: '0 6px 16px rgba(0, 0, 0, 0.12)',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          '&:hover': {
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
+            transform: 'translateY(-5px)',
+          },
+          height: 'auto', // Ensure height adjusts to content
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            🏆 Most Productive Day
+          </Typography>
+          <Typography variant="h4" fontWeight={700}>
+            {new Date(analytics.bestDay).toLocaleDateString('en-US', {
+              weekday: 'long',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </Typography>
+        </Box>
+        <Typography variant="body2" sx={{ opacity: 0.8, mt: 'auto' }}>
+          Keep up the great work!
+        </Typography>
+      </Paper>
+    </Grid>
+  )}
+  {analytics?.worstDay && (
+    <Grid item xs={12} md={6}>
+      <Paper
+        sx={{
+          p: 3,
+          background: 'linear-gradient(90deg, #f093fb 0%, #f5576c 100%)',
+          color: 'white',
+          borderRadius: '12px',
+          boxShadow: '0 6px 16px rgba(0, 0, 0, 0.12)',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          '&:hover': {
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.18)',
+            transform: 'translateY(-5px)',
+          },
+          height: 'auto', // Ensure height adjusts to content
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            😴 Least Productive Day
+          </Typography>
+          <Typography variant="h4" fontWeight={700}>
+            {new Date(analytics.worstDay).toLocaleDateString('en-US', {
+              weekday: 'long',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </Typography>
+        </Box>
+        <Typography variant="body2" sx={{ opacity: 0.8, mt: 'auto' }}>
+          You can do better!
+        </Typography>
+      </Paper>
+    </Grid>
+  )}
+</Grid>
     </Box>
   );
 };
