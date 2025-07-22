@@ -27,7 +27,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import TaskIcon from '@mui/icons-material/Task';
 import PersonIcon from '@mui/icons-material/Person';
-import { useAuth } from '../contexts/AuthContext'; 
+import { useAuth } from '../../contexts/AuthContext'; // <-- FIXED PATH
 
 // Example routes (replace with your actual routes/constants)
 const ROUTES = {
@@ -75,7 +75,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  // Example user (replace with your auth logic)
+  // Use real user from AuthContext
   const { state } = useAuth();
   const user = state.user;
 
@@ -213,20 +213,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               fontWeight: 600,
             }}
           >
-            {user?.username?.charAt(0).toUpperCase()}
+            {user?.username?.charAt(0).toUpperCase() || '?'}
           </Avatar>
           <Box sx={{ flexGrow: 1 }}>
             <Typography
               variant="subtitle2"
               sx={{ fontWeight: 600, color: 'var(--text-primary)' }}
             >
-              {user?.username}
+              {user?.username || 'Guest'}
             </Typography>
             <Typography
               variant="caption"
               sx={{ color: 'var(--text-secondary)' }}
             >
-              {user?.email}
+              {user?.email || ''}
             </Typography>
           </Box>
         </Box>
