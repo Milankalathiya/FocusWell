@@ -402,17 +402,18 @@ const AnalyticsPage: React.FC = () => {
             sx={{
               borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--border-light)',
-              boxShadow: 'var(--shadow-sm)',
-              height: 450, // Increased height significantly
+              boxShadow: 'var(--shadow-md)', // Stronger shadow
+              height: 500, // Even larger height
+              backgroundColor: '#FFFFFF', // Ensure white background
             }}
           >
             <CardContent>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
                 Task Completion Trend
               </Typography>
-              <ResponsiveContainer width="100%" height={350}> {/* Increased height */}
-                <BarChart data={taskCompletion}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#D3D3D3" />
+              <ResponsiveContainer width="100%" height={400}> {/* Larger height */}
+                <BarChart data={taskCompletion} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                  <CartesianGrid strokeDasharray="5 5" stroke="#E0E0E0" />
                   <XAxis
                     dataKey="date"
                     tickFormatter={(value) =>
@@ -421,19 +422,21 @@ const AnalyticsPage: React.FC = () => {
                         day: 'numeric',
                       })
                     }
-                    style={{ fontSize: '14px', fontWeight: 'bold' }}
-                    interval={0} // Show all labels
+                    style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}
+                    interval={0}
+                    tick={{ transform: 'translate(0, 5)' }} // Adjust tick position
                   />
-                  <YAxis style={{ fontSize: '14px', fontWeight: 'bold' }} />
+                  <YAxis
+                    style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}
+                    tick={{ transform: 'translate(-5, 0)' }} // Adjust tick position
+                  />
                   <Tooltip
-                    labelFormatter={(value) =>
-                      new Date(value).toLocaleDateString()
-                    }
-                    contentStyle={{ fontSize: '14px', fontWeight: 'bold' }}
+                    contentStyle={{ fontSize: '16px', fontWeight: 'bold', backgroundColor: '#FFF', border: '1px solid #CCC' }}
+                    itemStyle={{ color: '#333' }}
                   />
-                  <Bar dataKey="completed" fill="#10B981" name="Completed" barSize={30} /> {/* Thicker bars */}
-                  <Bar dataKey="total" fill="#E5E7EB" name="Total" barSize={30} />
-                  <Legend wrapperStyle={{ fontSize: '14px', fontWeight: 'bold' }} />
+                  <Bar dataKey="completed" fill="#10B981" name="Completed" barSize={40} /> {/* Thicker bars */}
+                  <Bar dataKey="total" fill="#E5E7EB" name="Total" barSize={40} />
+                  <Legend wrapperStyle={{ fontSize: '16px', fontWeight: 'bold', paddingTop: '10px' }} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -444,34 +447,35 @@ const AnalyticsPage: React.FC = () => {
             sx={{
               borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--border-light)',
-              boxShadow: 'var(--shadow-sm)',
-              height: 450, // Increased height significantly
+              boxShadow: 'var(--shadow-md)', // Stronger shadow
+              height: 500, // Even larger height
+              backgroundColor: '#FFFFFF', // Ensure white background
             }}
           >
             <CardContent>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
                 Task Status Distribution
               </Typography>
-              <ResponsiveContainer width="100%" height={350}> {/* Increased height */}
-                <PieChart>
+              <ResponsiveContainer width="100%" height={400}> {/* Larger height */}
+                <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
                   <Pie
                     data={pieData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={80} // Larger inner radius
-                    outerRadius={140} // Larger outer radius
+                    innerRadius={100} // Larger inner radius
+                    outerRadius={180} // Larger outer radius
                     paddingAngle={5}
                     dataKey="value"
                     label={({ name, value }) => `${name}: ${value}`} // Clear labels
                     labelLine={false}
-                    labelStyle={{ fontSize: '14px', fontWeight: 'bold', fill: '#333' }}
+                    labelStyle={{ fontSize: '18px', fontWeight: 'bold', fill: '#333', textAnchor: 'middle' }}
                   >
                     {pieData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip contentStyle={{ fontSize: '14px', fontWeight: 'bold' }} />
-                  <Legend wrapperStyle={{ fontSize: '14px', fontWeight: 'bold' }} />
+                  <Tooltip contentStyle={{ fontSize: '16px', fontWeight: 'bold', backgroundColor: '#FFF', border: '1px solid #CCC' }} />
+                  <Legend wrapperStyle={{ fontSize: '16px', fontWeight: 'bold', paddingTop: '10px' }} />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
@@ -482,17 +486,18 @@ const AnalyticsPage: React.FC = () => {
             sx={{
               borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--border-light)',
-              boxShadow: 'var(--shadow-sm)',
-              height: 450, // Increased height significantly
+              boxShadow: 'var(--shadow-md)', // Stronger shadow
+              height: 500, // Even larger height
+              backgroundColor: '#FFFFFF', // Ensure white background
             }}
           >
             <CardContent>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
                 Habit Consistency
               </Typography>
-              <ResponsiveContainer width="100%" height={350}> {/* Increased height */}
-                <LineChart data={habitConsistency}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#D3D3D3" />
+              <ResponsiveContainer width="100%" height={400}> {/* Larger height */}
+                <LineChart data={habitConsistency} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                  <CartesianGrid strokeDasharray="5 5" stroke="#E0E0E0" />
                   <XAxis
                     dataKey="date"
                     tickFormatter={(value) =>
@@ -501,34 +506,36 @@ const AnalyticsPage: React.FC = () => {
                         day: 'numeric',
                       })
                     }
-                    style={{ fontSize: '14px', fontWeight: 'bold' }}
-                    interval={0} // Show all labels
+                    style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}
+                    interval={0}
+                    tick={{ transform: 'translate(0, 5)' }} // Adjust tick position
                   />
-                  <YAxis style={{ fontSize: '14px', fontWeight: 'bold' }} />
+                  <YAxis
+                    style={{ fontSize: '16px', fontWeight: 'bold', color: '#333' }}
+                    tick={{ transform: 'translate(-5, 0)' }} // Adjust tick position
+                  />
                   <Tooltip
-                    labelFormatter={(value) =>
-                      new Date(value).toLocaleDateString()
-                    }
-                    contentStyle={{ fontSize: '14px', fontWeight: 'bold' }}
+                    contentStyle={{ fontSize: '16px', fontWeight: 'bold', backgroundColor: '#FFF', border: '1px solid #CCC' }}
+                    itemStyle={{ color: '#333' }}
                   />
                   <Line
                     type="monotone"
                     dataKey="logged"
                     stroke="#8B5CF6"
-                    strokeWidth={4} // Thicker line
-                    dot={{ fill: '#8B5CF6', r: 6 }} // Larger dots
+                    strokeWidth={5} // Thicker line
+                    dot={{ fill: '#8B5CF6', r: 8 }} // Larger dots
                     name="Logged"
                   />
                   <Line
                     type="monotone"
                     dataKey="total"
                     stroke="#E5E7EB"
-                    strokeWidth={2}
+                    strokeWidth={3}
                     strokeDasharray="5 5"
-                    dot={{ fill: '#E5E7EB', r: 4 }}
+                    dot={{ fill: '#E5E7EB', r: 6 }}
                     name="Total"
                   />
-                  <Legend wrapperStyle={{ fontSize: '14px', fontWeight: 'bold' }} />
+                  <Legend wrapperStyle={{ fontSize: '16px', fontWeight: 'bold', paddingTop: '10px' }} />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
