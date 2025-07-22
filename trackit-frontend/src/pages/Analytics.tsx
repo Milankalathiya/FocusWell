@@ -397,7 +397,7 @@ const AnalyticsPage: React.FC = () => {
       </Grid>
       {/* Charts Section - 3 columns, full width */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Card
             sx={{
               borderRadius: 'var(--radius-lg)',
@@ -436,7 +436,7 @@ const AnalyticsPage: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Card
             sx={{
               borderRadius: 'var(--radius-lg)',
@@ -471,7 +471,7 @@ const AnalyticsPage: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Card
             sx={{
               borderRadius: 'var(--radius-lg)',
