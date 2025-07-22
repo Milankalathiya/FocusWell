@@ -60,64 +60,69 @@ def chat():
 @app.route('/analyze', methods=['POST'])
 def analyze():
     print("Analyze endpoint hit")
-    data = request.json
-    wellness_data = data.get('wellnessData', [])
-    tasks = data.get('tasks', [])
-    habit_logs = data.get('habitLogs', [])
+    return jsonify({"status": "ok"})
 
-    # Extract notes/journals for sentiment analysis
-    notes = " ".join([d.get('notes', '') for d in wellness_data if d.get('notes')])
-    prompt = (
-        "You are a wellness coach AI. Analyze the following user journal notes for mood, stress, and overall sentiment. "
-        "Summarize the user's emotional state in 1-2 sentences and suggest one actionable tip for improvement.\n\n"
-        f"User notes: {notes}\n"
-    )
-    try:
-        response = co.generate(
-            model="command-r-plus",
-            prompt=prompt,
-            max_tokens=120,
-            temperature=0.7
-        )
-        sentiment_summary = response.generations[0].text.strip()
-    except Exception as e:
-        print(f"Cohere error: {e}")
-        sentiment_summary = "No journal analysis available."
+# @app.route('/analyze', methods=['POST'])
+# def analyze():
+#     print("Analyze endpoint hit")
+#     data = request.json
+#     wellness_data = data.get('wellnessData', [])
+#     tasks = data.get('tasks', [])
+#     habit_logs = data.get('habitLogs', [])
 
-    # Recommendations
-    rec_prompt = (
-        "You are a wellness and productivity AI coach. Based on the following user data (habits, mood, sleep, tasks, etc.), "
-        "generate 2-3 personalized, science-backed recommendations to improve their well-being.\n\n"
-        f"User data: {str({'wellnessData': wellness_data, 'tasks': tasks, 'habitLogs': habit_logs})}\n"
-    )
-    try:
-        rec_response = co.generate(
-            model="command-r-plus",
-            prompt=rec_prompt,
-            max_tokens=180,
-            temperature=0.7
-        )
-        recommendations = rec_response.generations[0].text.strip()
-    except Exception as e:
-        print(f"Cohere error: {e}")
-        recommendations = "- Maintain 7+ hours sleep.\n- Complete one small task daily.\n- Try a short walk for stress relief."
+#     # Extract notes/journals for sentiment analysis
+#     notes = " ".join([d.get('notes', '') for d in wellness_data if d.get('notes')])
+#     prompt = (
+#         "You are a wellness coach AI. Analyze the following user journal notes for mood, stress, and overall sentiment. "
+#         "Summarize the user's emotional state in 1-2 sentences and suggest one actionable tip for improvement.\n\n"
+#         f"User notes: {notes}\n"
+#     )
+#     try:
+#         response = co.generate(
+#             model="command-r-plus",
+#             prompt=prompt,
+#             max_tokens=120,
+#             temperature=0.7
+#         )
+#         sentiment_summary = response.generations[0].text.strip()
+#     except Exception as e:
+#         print(f"Cohere error: {e}")
+#         sentiment_summary = "No journal analysis available."
 
-    # Example: Calculate a simple wellness score (average of moodScore if available)
-    mood_scores = [d.get('moodScore') for d in wellness_data if d.get('moodScore') is not None]
-    wellness_score = round(sum(mood_scores) / len(mood_scores), 2) if mood_scores else 75
+#     # Recommendations
+#     rec_prompt = (
+#         "You are a wellness and productivity AI coach. Based on the following user data (habits, mood, sleep, tasks, etc.), "
+#         "generate 2-3 personalized, science-backed recommendations to improve their well-being.\n\n"
+#         f"User data: {str({'wellnessData': wellness_data, 'tasks': tasks, 'habitLogs': habit_logs})}\n"
+#     )
+#     try:
+#         rec_response = co.generate(
+#             model="command-r-plus",
+#             prompt=rec_prompt,
+#             max_tokens=180,
+#             temperature=0.7
+#         )
+#         recommendations = rec_response.generations[0].text.strip()
+#     except Exception as e:
+#         print(f"Cohere error: {e}")
+#         recommendations = "- Maintain 7+ hours sleep.\n- Complete one small task daily.\n- Try a short walk for stress relief."
 
-    # Example: Simple insights
-    insights = [
-        "Your mood tends to drop after nights with less than 6 hours of sleep.",
-        "Completing tasks is strongly correlated with higher mood for you."
-    ]
+#     # Example: Calculate a simple wellness score (average of moodScore if available)
+#     mood_scores = [d.get('moodScore') for d in wellness_data if d.get('moodScore') is not None]
+#     wellness_score = round(sum(mood_scores) / len(mood_scores), 2) if mood_scores else 75
 
-    return jsonify({
-        "wellnessScore": wellness_score,
-        "insights": insights,
-        "recommendations": recommendations,
-        "sentimentSummary": sentiment_summary
-    })
+#     # Example: Simple insights
+#     insights = [
+#         "Your mood tends to drop after nights with less than 6 hours of sleep.",
+#         "Completing tasks is strongly correlated with higher mood for you."
+#     ]
+
+#     return jsonify({
+#         "wellnessScore": wellness_score,
+#         "insights": insights,
+#         "recommendations": recommendations,
+#         "sentimentSummary": sentiment_summary
+#     })
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
