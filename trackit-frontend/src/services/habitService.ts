@@ -9,12 +9,12 @@ export interface CreateHabitRequest {
 
 export const habitService = {
   async getAllHabits(): Promise<Habit[]> {
-    const response = await api.get('/habits');
+    const response = await api.get('/api/habits');
     return response.data;
   },
 
   async createHabit(habitData: CreateHabitRequest): Promise<Habit> {
-    const response = await api.post('/habits', habitData);
+    const response = await api.post('/api/habits', habitData);
     return response.data;
   },
 
@@ -22,7 +22,7 @@ export const habitService = {
     id: number,
     habitData: Partial<CreateHabitRequest>
   ): Promise<Habit> {
-    const response = await api.put(`/habits/${id}`, habitData);
+    const response = await api.put(`/api/habits/${id}`, habitData);
     return response.data;
   },
 
@@ -36,17 +36,17 @@ export const habitService = {
   },
 
   async getHabitLogs(id: number): Promise<HabitLog[]> {
-    const response = await api.get(`/habits/${id}/logs`);
+    const response = await api.get(`/api/habits/${id}/logs`);
     return response.data;
   },
 
   async getWeeklyProgress(id: number): Promise<number[]> {
-    const response = await api.get(`/habits/${id}/weekly-progress`);
+    const response = await api.get(`/api/habits/${id}/weekly-progress`);
     return response.data;
   },
 
   async getStreak(id: number): Promise<{ currentStreak: number }> {
-    const response = await api.get(`/habits/${id}/streak`);
+    const response = await api.get(`/api/habits/${id}/streak`);
     return response.data;
   },
 };
