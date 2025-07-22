@@ -27,11 +27,11 @@ export const habitService = {
   },
 
   async deleteHabit(id: number): Promise<void> {
-    await api.delete(`/habits/${id}`);
+    await api.delete(`/api/habits/${id}`);
   },
 
   async logHabit(id: number): Promise<Habit> {
-    const response = await api.post(`/habits/${id}/log`);
+    const response = await api.post(`/api/habits/${id}/log`);
     return response.data;
   },
 
