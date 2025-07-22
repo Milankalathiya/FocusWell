@@ -356,12 +356,13 @@ const Wellness: React.FC = () => {
       {/* Charts Section */}
       {hasData ? (
         <Grid container spacing={4}>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={6}>
             <Card
               sx={{
                 borderRadius: 'var(--radius-lg)',
                 border: '1px solid var(--border-light)',
                 boxShadow: 'var(--shadow-sm)',
+                width: '100%',
               }}
             >
               <Box
@@ -422,12 +423,13 @@ const Wellness: React.FC = () => {
               </Box>
             </Card>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={6}>
             <Card
               sx={{
                 borderRadius: 'var(--radius-lg)',
                 border: '1px solid var(--border-light)',
                 boxShadow: 'var(--shadow-sm)',
+                width: '100%',
               }}
             >
               <Box
