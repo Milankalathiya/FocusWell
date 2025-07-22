@@ -397,22 +397,22 @@ const AnalyticsPage: React.FC = () => {
       </Grid>
       {/* Charts Section - 3 columns, full width */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <Card
             sx={{
               borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--border-light)',
               boxShadow: 'var(--shadow-sm)',
-              height: 370,
+              height: 400, // Increased height for better visibility
             }}
           >
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Task Completion Trend
               </Typography>
-              <ResponsiveContainer width="100%" height={250}>
+              <ResponsiveContainer width="100%" height={300}> {/* Increased height */}
                 <BarChart data={taskCompletion}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
                   <XAxis
                     dataKey="date"
                     tickFormatter={(value) =>
@@ -421,72 +421,76 @@ const AnalyticsPage: React.FC = () => {
                         day: 'numeric',
                       })
                     }
+                    style={{ fontSize: '12px' }}
                   />
-                  <YAxis />
+                  <YAxis style={{ fontSize: '12px' }} />
                   <Tooltip
                     labelFormatter={(value) =>
                       new Date(value).toLocaleDateString()
                     }
+                    contentStyle={{ fontSize: '12px' }}
                   />
-                  <Bar dataKey="completed" fill="#10B981" name="Completed" />
-                  <Bar dataKey="total" fill="#E5E7EB" name="Total" />
-                  <Legend />
+                  <Bar dataKey="completed" fill="#10B981" name="Completed" barSize={20} /> {/* Adjusted bar size */}
+                  <Bar dataKey="total" fill="#E5E7EB" name="Total" barSize={20} />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <Card
             sx={{
               borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--border-light)',
               boxShadow: 'var(--shadow-sm)',
-              height: 370,
+              height: 400, // Increased height for better visibility
             }}
           >
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Task Status Distribution
               </Typography>
-              <ResponsiveContainer width="100%" height={250}>
+              <ResponsiveContainer width="100%" height={300}> {/* Increased height */}
                 <PieChart>
                   <Pie
                     data={pieData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
+                    innerRadius={70} // Increased inner radius for better visibility
+                    outerRadius={120} // Increased outer radius
                     paddingAngle={5}
                     dataKey="value"
+                    labelLine={false} // Removed label lines for cleaner look
+                    label={({ name, value }) => `${name}: ${value}`} // Added labels inside pie
                   >
                     {pieData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip />
-                  <Legend />
+                  <Tooltip contentStyle={{ fontSize: '12px' }} />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <Card
             sx={{
               borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--border-light)',
               boxShadow: 'var(--shadow-sm)',
-              height: 370,
+              height: 400, // Increased height for better visibility
             }}
           >
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Habit Consistency
               </Typography>
-              <ResponsiveContainer width="100%" height={250}>
+              <ResponsiveContainer width="100%" height={300}> {/* Increased height */}
                 <LineChart data={habitConsistency}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
                   <XAxis
                     dataKey="date"
                     tickFormatter={(value) =>
@@ -495,19 +499,21 @@ const AnalyticsPage: React.FC = () => {
                         day: 'numeric',
                       })
                     }
+                    style={{ fontSize: '12px' }}
                   />
-                  <YAxis />
+                  <YAxis style={{ fontSize: '12px' }} />
                   <Tooltip
                     labelFormatter={(value) =>
                       new Date(value).toLocaleDateString()
                     }
+                    contentStyle={{ fontSize: '12px' }}
                   />
                   <Line
                     type="monotone"
                     dataKey="logged"
                     stroke="#8B5CF6"
-                    strokeWidth={2}
-                    dot={{ fill: '#8B5CF6' }}
+                    strokeWidth={3} // Increased stroke width for visibility
+                    dot={{ fill: '#8B5CF6', r: 4 }} // Increased dot size
                     name="Logged"
                   />
                   <Line
@@ -516,10 +522,10 @@ const AnalyticsPage: React.FC = () => {
                     stroke="#E5E7EB"
                     strokeWidth={2}
                     strokeDasharray="5 5"
-                    dot={{ fill: '#E5E7EB' }}
+                    dot={{ fill: '#E5E7EB', r: 3 }}
                     name="Total"
                   />
-                  <Legend />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
