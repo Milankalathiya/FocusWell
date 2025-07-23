@@ -5,7 +5,7 @@ import cohere
 app = Flask(__name__)
 
 # Set your Cohere API key here or via environment variable
-COHERE_API_KEY = os.getenv("COHERE_API_KEY", "2XiUiLSO1N3W4CQaLGm9JJX1lHvVs2jJ7lOJ7YKi")
+COHERE_API_KEY = os.getenv("COHERE_API_KEY")
 co = cohere.Client(COHERE_API_KEY)
 
 # Expanded allowed topics with variations
