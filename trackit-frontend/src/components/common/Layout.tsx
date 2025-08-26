@@ -1,47 +1,40 @@
-import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import MenuIcon from '@mui/icons-material/Menu';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
+import TaskIcon from '@mui/icons-material/Task';
 import {
   AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
+  Avatar,
+  Box,
+  CssBaseline,
   Drawer,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Avatar,
-  Box,
-  CssBaseline,
   Menu,
   MenuItem,
-  useTheme,
+  Toolbar,
+  Typography,
   useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import TaskIcon from '@mui/icons-material/Task';
-import PersonIcon from '@mui/icons-material/Person';
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext'; // <-- FIXED PATH
+import { ROUTES } from '../../utils/constants';
 
-// Example routes (replace with your actual routes/constants)
-const ROUTES = {
-  DASHBOARD: '/dashboard',
-  TASKS: '/tasks',
-  HABITS: '/habits',
-  ANALYTICS: '/analytics',
-  WELLNESS: '/wellness',
-  PROFILE: '/profile',
-};
+// Routes are imported from utils/constants (keeps a single source of truth)
 
 const drawerWidth = 260;
 
-const menuItems = [
+const baseMenuItems = [
   {
     text: 'Dashboard',
     icon: <DashboardIcon />,
@@ -67,7 +60,14 @@ const menuItems = [
     icon: <AssignmentIcon />,
     path: ROUTES.WELLNESS,
   },
+  {
+    text: 'Nutrition',
+    icon: <RestaurantIcon />,
+    path: ROUTES.NUTRITION,
+  },
 ];
+
+const menuItems = baseMenuItems;
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();

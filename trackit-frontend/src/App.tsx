@@ -2,10 +2,10 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Toaster } from 'react-hot-toast';
 import {
-  Navigate,
-  Route,
-  BrowserRouter as Router,
-  Routes,
+    Navigate,
+    Route,
+    BrowserRouter as Router,
+    Routes,
 } from 'react-router-dom';
 import LoginForm from './components/auth/LoginForm';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -16,6 +16,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Analytics from './pages/Analytics';
 import Dashboard from './pages/Dashboard';
 import Habits from './pages/Habits';
+import Nutrition from './pages/Nutrition';
 import Profile from './pages/Profile';
 import Tasks from './pages/Tasks';
 import Wellness from './pages/Wellness';
@@ -165,6 +166,17 @@ function App() {
                   <ProtectedRoute>
                     <Layout>
                       <Wellness />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path={ROUTES.NUTRITION}
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <Nutrition />
                     </Layout>
                   </ProtectedRoute>
                 }

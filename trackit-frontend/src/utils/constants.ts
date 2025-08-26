@@ -1,6 +1,8 @@
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
 
+export const API_ORIGIN = API_BASE_URL.replace(/\/api$/, '');
+
 export const ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
@@ -10,6 +12,7 @@ export const ROUTES = {
   ANALYTICS: '/analytics',
   WELLNESS: '/wellness',
   PROFILE: '/profile',
+  NUTRITION: '/nutrition',
 } as const;
 
 export const API_ENDPOINTS = {
@@ -29,6 +32,15 @@ export const API_ENDPOINTS = {
   HABITS: {
     BASE: '/api/habits',
     LOG: '/api/habits/log',
+  },
+  NUTRITION: {
+    BASE: '/api/nutrition',
+    PROFILE: '/api/nutrition/profile',
+    CALC: '/api/nutrition/calc/targets',
+    FOODS: '/api/nutrition/foods',
+    MEALS: '/api/nutrition/meals',
+    MEALS_DAY: '/api/nutrition/meals/day',
+    WEIGHT: '/api/nutrition/weight',
   },
 } as const;
 
